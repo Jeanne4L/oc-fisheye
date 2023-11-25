@@ -1,0 +1,56 @@
+h1 {
+	color: var(--primary-color);
+	margin-right: 100px;
+}
+
+.photographer_section {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 70px;
+	margin: 100px 0;
+}
+
+.photographer_section article {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-direction: column;
+}
+
+.photographer_section article a {
+	text-align: center;
+}
+
+.photographer_section h2 {
+	color: var(--secondary-color);
+	font-size: 36px;
+	font-weight: 400;
+}
+
+.photographer_section h2,
+.location,
+.tagline,
+.tariff {
+	margin: 0;
+}
+
+.photographer_section img {
+	height: 200px;
+	width: 200px;
+	border-radius: 500px;
+	object-fit: cover;
+}
+
+.location {
+	color: var(--primary-color);
+	font-weight: 400;
+}
+
+.tagline {
+	font-size: 10px;
+}
+
+.tariff {
+	color: var(--gray-color);
+	font-size: 9px;
+}
