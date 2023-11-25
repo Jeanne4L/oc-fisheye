@@ -8,10 +8,11 @@ function photographerTemplate(data) {
 		const img = document.createElement('img');
 
 		const link = document.createElement('a');
-		link.href = '#';
+		link.href = `photographer.html?id=${id}`;
 
-		img.setAttribute('src', picture);
-		img.setAttribute('loading', 'lazy');
+		img.src = picture;
+		img.alt = name;
+		img.loading = 'lazy';
 
 		const h2 = document.createElement('h2');
 		h2.textContent = name;
