@@ -7,6 +7,10 @@
 	--gray-color: #757575;
 }
 
+* {
+	box-sizing: border-box;
+}
+
 body {
 	font-family: 'DM Sans', sans-serif;
 	margin: 0;

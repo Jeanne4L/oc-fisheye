@@ -1,6 +1,7 @@
 h1 {
 	color: var(--primary-color);
 	margin-right: 100px;
+	font-size: 36px;
 }
 
 .photographer_section {

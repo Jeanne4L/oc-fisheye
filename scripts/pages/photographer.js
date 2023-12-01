@@ -9,8 +9,6 @@ const getPhotographer = async () => {
 		}
 
 		return await response.json();
-
-		// displayPhotographerData(photographerData, photographerMedia);
 	} catch (error) {
 		console.error('Error fetching data:', error);
 	}
