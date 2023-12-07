@@ -113,6 +113,15 @@ const displayPhotographerData = async (photographer, media) => {
 	// display info box with likes and price
 	const main = document.querySelector('main');
 	main.appendChild(displayInfoBox(media, price));
+
+	// display photographer name in the modal
+	// const modal = document.querySelector
+	const modalTitle = document.querySelector('#modal-title');
+	// const photographerName = document.createElement('h2');
+
+	modalTitle.innerHTML += '<br>' + name;
+
+	// modalTitle.prepend(modal);
 };
 
 const init = async () => {

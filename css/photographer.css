@@ -1,11 +1,12 @@
+main {
+	margin: 50px 100px;
+	position: relative;
+}
 .photograph-header {
 	background-color: #fafafa;
 	height: 300px;
-	margin: 0 100px;
-	/* display: flex;
-	justify-content: space-evenly;
-	align-items: center; */
-	padding: 20px;
+	padding: 0 50px;
+	margin-bottom: 50px;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	place-items: center;
@@ -30,26 +31,37 @@ h2 {
 	width: 200px;
 	border-radius: 500px;
 	object-fit: cover;
-}
-
-#contact_modal {
-	display: none;
+	justify-self: flex-end;
 }
 
 .contact_button {
 	font-size: 20px;
 	font-weight: bold;
 	color: white;
-	padding: 11px;
-	width: 170px;
-	height: 70px;
+	padding: 15px 20px;
 	border: none;
 	background-color: var(--primary-color);
 	border-radius: 5px;
 	cursor: pointer;
 }
 
+/*          MODAL            */
+#contact-modal {
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background: rgba(255, 255, 255, 0.5);
+	z-index: 10000;
+}
+
 .modal {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 	border-radius: 5px;
 	background-color: var(--tertiary-color);
 	width: 50%;
@@ -59,36 +71,41 @@ h2 {
 	justify-content: space-between;
 	padding: 35px;
 	margin: auto;
+	box-shadow: 0px 5px 20px 5px rgba(0, 0, 0, 0.3);
 }
 
-.modal header {
+.modal-header {
+	display: flex;
 	justify-content: space-between;
+	align-items: baseline;
 	width: 100%;
 }
 
-.modal header img {
+.modal-header img {
 	cursor: pointer;
+	width: 25px;
 }
 
-.modal header h2 {
-	font-size: 64px;
+.modal-header h2 {
+	font-size: 36px;
 	font-weight: normal;
-	text-align: center;
+	margin: 0 0 20px 0;
+	color: #000;
 }
 
-form {
+#contact-form {
 	display: flex;
 	width: 100%;
 	flex-direction: column;
 	align-items: flex-start;
 }
 
-label {
+#contact-form label {
 	color: #312e2e;
-	font-size: 36px;
+	font-size: 18px;
 }
 
-form div {
+#contact-form div {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
@@ -96,9 +113,144 @@ form div {
 	margin-bottom: 26px;
 }
 
-input {
+#contact-form input,
+#contact-form textarea {
 	width: 100%;
-	height: 68px;
+	padding: 12px;
 	border: none;
 	border-radius: 5px;
+	margin-bottom: 5px;
+}
+
+#contact-form textarea {
+	height: 80px;
+}
+
+#contact-form .contact_button {
+	margin-top: 20px;
+}
+
+/*          SORT PROJECTS            */
+.sort-form {
+	display: flex;
+	position: relative;
+}
+
+.sort-label {
+	font-size: 18px;
+	font-weight: 700;
+	margin-right: 20px;
+	padding-top: 15px;
+}
+
+.sort-filters {
+	position: absolute;
+	left: 90px;
+	z-index: 1000;
+	background-color: var(--primary-color);
+	color: white;
+	margin: 0;
+	padding: 0;
+	height: 54px;
+	overflow: hidden;
+	list-style-type: none;
+	border-radius: 5px;
+	transition: height 300ms;
+}
+
+.displayed-list {
+	height: 164px;
+}
+
+.sort-filters li {
+	padding: 15px 12px;
+	margin: 0 8px;
+	border-bottom: solid 1px white;
+	font-size: 18px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+/* .sort-filters li:hover {
+
+} */
+
+.sort-filters li:first-of-type {
+	display: flex;
+}
+
+.sort-button {
+	margin-left: 15px;
+	transition: transform 300ms;
+}
+
+.returned-button {
+	transform: rotate(180deg);
+}
+
+.sort-filters li:last-of-type {
+	border: none;
+}
+
+#medias {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 50px;
+	margin-top: 50px;
+}
+
+#medias video,
+#medias img {
+	width: 100%;
+	height: 300px;
+	object-fit: cover;
+	border-radius: 5px;
+}
+
+.media-description {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 24px;
+	color: var(--primary-color);
+	margin-top: 5px;
+}
+
+.media-description p {
+	margin: 0;
+}
+
+.media-description span {
+	display: flex;
+	align-items: center;
+}
+
+.media-description svg {
+	margin-left: 5px;
+}
+
+.info-box {
+	position: fixed;
+	bottom: 0;
+	right: 100px;
+	background-color: var(--tertiary-color);
+	padding: 16px 24px;
+	border-radius: 8px 8px 0 0;
+	font-size: 24px;
+	font-weight: 500;
+	display: flex;
+	justify-content: space-between;
+}
+
+.total-likes {
+	display: flex;
+	align-items: center;
+}
+
+.total-likes svg {
+	margin-left: 8px;
+}
+
+.info-box .tariff {
+	margin-left: 50px;
 }
