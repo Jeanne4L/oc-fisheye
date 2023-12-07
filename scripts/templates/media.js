@@ -1,9 +1,7 @@
 function mediaTemplate(data, photographerName) {
 	const { id, photographerId, title, image, video, likes, date, price } = data;
 
-	const nameToArray = photographerName.split(' ');
-	const firstName = nameToArray[0];
-	const formattedFirstName = firstName.replace('-', ' ');
+	const formattedFirstName = formatName(photographerName);
 
 	const imgPath = `../../assets/photographers/${formattedFirstName}/${image}`;
 	const videoPath = `../../assets/photographers/${formattedFirstName}/${video}`;
@@ -53,3 +51,9 @@ function mediaTemplate(data, photographerName) {
 	}
 	return { data, getMediaCardDOM };
 }
+
+const formatName = (name) => {
+	const nameToArray = name.split(' ');
+	const firstName = nameToArray[0];
+	return firstName.replace('-', ' ');
+};
