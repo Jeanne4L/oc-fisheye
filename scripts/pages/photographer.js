@@ -14,11 +14,14 @@ const getPhotographer = async () => {
 	}
 };
 
-const displayData = async (photographer, media) => {
+const displayPhotographerData = async (photographer, media) => {
 	const { name, id, city, country, tagline, price, portrait } = photographer;
+
+	document.title = `Fisheye - ${name}`;
 	const picture = `assets/photographers/${portrait}`;
 
 	const banner = document.querySelector('.photograph-header');
+	const mediaContainer = document.querySelector('#medias');
 
 	const photographerDescription = document.createElement('div');
 
@@ -46,6 +49,12 @@ const displayData = async (photographer, media) => {
 	photographerDescription.appendChild(location);
 	photographerDescription.appendChild(tagLine);
 	banner.appendChild(img);
+
+	media.forEach((photo) => {
+		const mediaModel = mediaTemplate(photo, name);
+		const mediaCardDOM = mediaModel.getMediaCardDOM();
+		mediaContainer.appendChild(mediaCardDOM);
+	});
 };
 
 const init = async () => {
@@ -55,8 +64,15 @@ const init = async () => {
 		(photographer) => photographer.id === id
 	);
 
-	const photographerMedia = media.find((media) => media.photographerId === id);
-
-	displayData(photographerData, photographerMedia);
+	const photographerMedia = media.filter((m) => m.photographerId === id);
+	displayPhotographerData(photographerData, photographerMedia);
 };
 init();
+
+const displayFiltersListButton = document.querySelector('#sort-button');
+const sortFiltersList = document.querySelector('#sort-filters');
+
+displayFiltersListButton.addEventListener('click', () => {
+	displayFiltersListButton.classList.toggle('returned-button');
+	sortFiltersList.classList.toggle('displayed-list');
+});
