@@ -91,38 +91,16 @@ const nextButton = document.querySelector('#media-next-button');
 const modalImg = document.createElement('img');
 const modalVideo = document.createElement('video');
 
-const displayMediaModalContent = (id, media, photographerName) => {
-	const displayedMedia = media.find((med) => med.id === id);
-	const index = media.indexOf(displayedMedia);
-
-	const imgPath = `../../assets/photographers/${formatName(photographerName)}/${
-		displayedMedia.image
-	}`;
-	const videoPath = `../../assets/photographers/${formatName(
-		photographerName
-	)}/${displayedMedia.video}`;
-
-	if (displayedMedia.image) {
-		modalImg.src = imgPath;
-		modalImg.alt = displayedMedia.title;
-		modalImg.classList.add('displayed-media');
-		contentContainer.appendChild(modalImg);
-	}
-
-	if (displayedMedia.video) {
-		modalVideo.src = videoPath;
-		modalVideo.type = 'video/mp4';
-		modalVideo.classList.add('displayed-media');
-		modalVideo.setAttribute('controls', true);
-		contentContainer.appendChild(modalVideo);
-	}
-};
-
 const openMediaModal = (e, media, photographerName) => {
 	const modal = document.getElementById('media-modal-overlay');
 	modal.style.display = 'block';
 
-	displayMediaModalContent(Number(e.target.id), media, photographerName);
+	const displayedMedia = media.find((med) => med.id === Number(e.target.id));
+
+	const mediaModel = mediaTemplate(displayedMedia, photographerName, true);
+	const mediaCardDOM = mediaModel.getMediaCardDOM();
+	contentContainer.innerHTML = '';
+	contentContainer.appendChild(mediaCardDOM);
 };
 
 const scrollMedia = (e, media, photographerName, direction) => {
@@ -168,8 +146,8 @@ const displayPhotographerData = async (photographer, media) => {
 
 	displayFiltersList();
 
-	media.forEach((photo) => {
-		const mediaModel = mediaTemplate(photo, name);
+	media.forEach((mediaItem) => {
+		const mediaModel = mediaTemplate(mediaItem, name, false);
 		const mediaCardDOM = mediaModel.getMediaCardDOM();
 		mediaContainer.appendChild(mediaCardDOM);
 	});
