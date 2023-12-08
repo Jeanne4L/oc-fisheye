@@ -1,10 +1,14 @@
-@import url('photographer.css');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
 :root {
 	--primary-color: #901c1c;
 	--secondary-color: #d3573c;
 	--tertiary-color: #db8876;
 	--gray-color: #757575;
+
+	--font-normal: 400;
+	--font-semi-bold: 500;
+	--font-bold: 700;
 }
 
 * {

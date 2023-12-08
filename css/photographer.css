@@ -46,7 +46,8 @@ h2 {
 }
 
 /*          MODAL            */
-#contact-modal {
+#contact-modal-overlay,
+#media-modal-overlay {
 	display: none;
 	position: fixed;
 	width: 100%;
@@ -63,8 +64,6 @@ h2 {
 	top: 50%;
 	transform: translate(-50%, -50%);
 	border-radius: 5px;
-	background-color: var(--tertiary-color);
-	width: 50%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -72,6 +71,16 @@ h2 {
 	padding: 35px;
 	margin: auto;
 	box-shadow: 0px 5px 20px 5px rgba(0, 0, 0, 0.3);
+}
+
+.close-button {
+	cursor: pointer;
+}
+
+/* CONTACT MODAL */
+.contact-modal {
+	background-color: var(--tertiary-color);
+	width: 50%;
 }
 
 .modal-header {
@@ -128,6 +137,24 @@ h2 {
 
 #contact-form .contact_button {
 	margin-top: 20px;
+}
+
+/*MEDIA MODAL*/
+.media-modal {
+	background: #fff;
+	max-height: 95vh;
+	max-width: 95vw;
+	flex-direction: row;
+}
+
+.media-modal-content {
+	margin: 0 20px;
+}
+
+.media-modal .close-button {
+	position: absolute;
+	top: 35px;
+	right: 35px;
 }
 
 /*          SORT PROJECTS            */
@@ -205,6 +232,7 @@ h2 {
 	height: 300px;
 	object-fit: cover;
 	border-radius: 5px;
+	cursor: pointer;
 }
 
 .media-description {
@@ -253,4 +281,8 @@ h2 {
 
 .info-box .tariff {
 	margin-left: 50px;
+}
+
+.hidden {
+	display: none;
 }

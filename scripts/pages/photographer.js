@@ -83,6 +83,70 @@ const displayFiltersList = () => {
 	});
 };
 
+const contentContainer = document.querySelector('.media-modal-content');
+const closeButton = document.querySelector('#media-close-button');
+const prevButton = document.querySelector('#media-prev-button');
+const nextButton = document.querySelector('#media-next-button');
+
+const modalImg = document.createElement('img');
+const modalVideo = document.createElement('video');
+
+const displayMediaModalContent = (id, media, photographerName) => {
+	const displayedMedia = media.find((med) => med.id === id);
+	const index = media.indexOf(displayedMedia);
+
+	const imgPath = `../../assets/photographers/${formatName(photographerName)}/${
+		displayedMedia.image
+	}`;
+	const videoPath = `../../assets/photographers/${formatName(
+		photographerName
+	)}/${displayedMedia.video}`;
+
+	if (displayedMedia.image) {
+		modalImg.src = imgPath;
+		modalImg.alt = displayedMedia.title;
+		modalImg.classList.add('displayed-media');
+		contentContainer.appendChild(modalImg);
+	}
+
+	if (displayedMedia.video) {
+		modalVideo.src = videoPath;
+		modalVideo.type = 'video/mp4';
+		modalVideo.classList.add('displayed-media');
+		modalVideo.setAttribute('controls', true);
+		contentContainer.appendChild(modalVideo);
+	}
+};
+
+const openMediaModal = (e, media, photographerName) => {
+	const modal = document.getElementById('media-modal-overlay');
+	modal.style.display = 'block';
+
+	displayMediaModalContent(Number(e.target.id), media, photographerName);
+};
+
+const scrollMedia = (e, media, photographerName, direction) => {
+	const displayedMedia = media.find((med) => med.id === e.target.id);
+	const index = media.indexOf(displayedMedia);
+
+	const prevIndex = index === 0 ? media.length : index - 1;
+	const nextIndex = index === media.length ? 0 : index + 1;
+
+	if (direction === -1) {
+		const id = media[prevIndex].id;
+		displayMediaModalContent(id, media, photographerName);
+	}
+	if (direction === 1) {
+		const id = media[nextIndex].id;
+		displayMediaModalContent(id, media, photographerName);
+	}
+};
+
+const closeMediaModal = () => {
+	const modal = document.getElementById('media-modal-overlay');
+	modal.style.display = 'none';
+};
+
 const displayPhotographerData = async (photographer, media) => {
 	const { name, id, city, country, tagline, price, portrait } = photographer;
 
@@ -114,14 +178,21 @@ const displayPhotographerData = async (photographer, media) => {
 	const main = document.querySelector('main');
 	main.appendChild(displayInfoBox(media, price));
 
-	// display photographer name in the modal
-	// const modal = document.querySelector
+	// display photographer name in the contact modal
 	const modalTitle = document.querySelector('#modal-title');
-	// const photographerName = document.createElement('h2');
-
 	modalTitle.innerHTML += '<br>' + name;
 
-	// modalTitle.prepend(modal);
+	// Toggle media modal
+	const mediaElts = document.querySelectorAll('.media');
+
+	mediaElts.forEach((mediaElt) => {
+		mediaElt.addEventListener('click', (e) => openMediaModal(e, media, name));
+	});
+
+	prevButton.addEventListener('click', (e) => scrollMedia(e, media, -1));
+	nextButton.addEventListener('click', (e) => scrollMedia(e, media, 1));
+
+	closeButton.addEventListener('click', closeMediaModal);
 };
 
 const init = async () => {

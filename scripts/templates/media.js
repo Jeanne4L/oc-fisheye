@@ -1,10 +1,12 @@
 function mediaTemplate(data, photographerName) {
 	const { id, photographerId, title, image, video, likes, date, price } = data;
 
-	const formattedFirstName = formatName(photographerName);
-
-	const imgPath = `../../assets/photographers/${formattedFirstName}/${image}`;
-	const videoPath = `../../assets/photographers/${formattedFirstName}/${video}`;
+	const imgPath = `../../assets/photographers/${formatName(
+		photographerName
+	)}/${image}`;
+	const videoPath = `../../assets/photographers/${formatName(
+		photographerName
+	)}/${video}`;
 
 	function getMediaCardDOM() {
 		const article = document.createElement('article');
@@ -17,6 +19,8 @@ function mediaTemplate(data, photographerName) {
 			const img = document.createElement('img');
 			img.src = imgPath;
 			img.alt = title;
+			img.classList.add('media');
+			img.id = id;
 			article.appendChild(img);
 		}
 
@@ -24,6 +28,8 @@ function mediaTemplate(data, photographerName) {
 			const video = document.createElement('video');
 			video.src = videoPath;
 			video.type = 'video/mp4';
+			video.classList.add('media');
+			video.id = id;
 			video.setAttribute('controls', true);
 			article.appendChild(video);
 		}
@@ -52,8 +58,8 @@ function mediaTemplate(data, photographerName) {
 	return { data, getMediaCardDOM };
 }
 
-const formatName = (name) => {
-	const nameToArray = name.split(' ');
-	const firstName = nameToArray[0];
-	return firstName.replace('-', ' ');
-};
+// const formatName = (name) => {
+// 	const nameToArray = name.split(' ');
+// 	const firstName = nameToArray[0];
+// 	return firstName.replace('-', ' ');
+// };
