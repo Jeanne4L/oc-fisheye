@@ -5,7 +5,8 @@ h1 {
 }
 
 main {
-	margin: 100px 0;
+	margin: 100px auto;
+	max-width: 1200px;
 }
 
 .photographer_section {
@@ -57,4 +58,38 @@ main {
 .tariff {
 	color: var(--gray-color);
 	font-size: 9px;
+}
+
+@media (max-width: 800px) {
+	header {
+		flex-direction: column;
+		padding: 20px 5% 0 5%;
+	}
+
+	.logo,
+	h1 {
+		margin: 0;
+	}
+
+	.photographer_section {
+		grid-template-columns: 1fr 1fr;
+		gap: 30px;
+	}
+
+	.location {
+		font-size: 24px;
+	}
+
+	.tagline,
+	.tariff {
+		font-size: 16px;
+		margin-top: 5px;
+	}
+}
+
+@media (max-width: 550px) {
+	.photographer_section {
+		grid-template-columns: 1fr;
+		gap: 50px;
+	}
 }
