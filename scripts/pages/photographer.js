@@ -1,6 +1,8 @@
 const params = new URL(document.location).searchParams;
 const id = parseInt(params.get('id'));
 
+let currentMedia = null;
+
 const getPhotographer = async () => {
 	try {
 		const response = await fetch('../../data/photographers.json');
@@ -12,6 +14,30 @@ const getPhotographer = async () => {
 	} catch (error) {
 		console.error('Error fetching data:', error);
 	}
+};
+
+const displayMediaInModalWithTemplate = (
+	mediaToDisplay,
+	photographerName,
+	isDisplayedInModal,
+	eltToInsertBefore
+) => {
+	const mediaModel = mediaTemplate(
+		mediaToDisplay,
+		photographerName,
+		isDisplayedInModal
+	);
+	const mediaCardDOM = mediaModel.getMediaCardDOM();
+
+	if (currentMedia) {
+		currentMedia.remove();
+	}
+
+	currentMedia = mediaCardDOM;
+	eltToInsertBefore.parentNode.insertBefore(
+		mediaCardDOM,
+		eltToInsertBefore.nextSibling
+	);
 };
 
 const calculateTotalCountOfLikes = (media) => {
@@ -83,46 +109,51 @@ const displayFiltersList = () => {
 	});
 };
 
-const contentContainer = document.querySelector('.media-modal-content');
+// const contentContainer = document.querySelector('.media-modal-content');
 const closeButton = document.querySelector('#media-close-button');
 const prevButton = document.querySelector('#media-prev-button');
 const nextButton = document.querySelector('#media-next-button');
+let index;
 
 const modalImg = document.createElement('img');
 const modalVideo = document.createElement('video');
 
 const openMediaModal = (e, media, photographerName) => {
 	const modal = document.getElementById('media-modal-overlay');
-	modal.style.display = 'block';
+	modal.style.display = 'flex';
+	document.body.style.overflow = 'hidden';
 
 	const displayedMedia = media.find((med) => med.id === Number(e.target.id));
+	index = media.indexOf(displayedMedia);
 
-	const mediaModel = mediaTemplate(displayedMedia, photographerName, true);
-	const mediaCardDOM = mediaModel.getMediaCardDOM();
-	contentContainer.innerHTML = '';
-	contentContainer.appendChild(mediaCardDOM);
+	displayMediaInModalWithTemplate(
+		displayedMedia,
+		photographerName,
+		true,
+		prevButton
+	);
 };
 
-const scrollMedia = (e, media, photographerName, direction) => {
-	const displayedMedia = media.find((med) => med.id === e.target.id);
-	const index = media.indexOf(displayedMedia);
+const scrollMedia = (currentIndex, media, photographerName, direction) => {
+	currentIndex = (currentIndex + direction + media.length) % media.length;
 
-	const prevIndex = index === 0 ? media.length : index - 1;
-	const nextIndex = index === media.length ? 0 : index + 1;
+	const mediaToDisplay = media[currentIndex];
 
-	if (direction === -1) {
-		const id = media[prevIndex].id;
-		displayMediaModalContent(id, media, photographerName);
-	}
-	if (direction === 1) {
-		const id = media[nextIndex].id;
-		displayMediaModalContent(id, media, photographerName);
-	}
+	index = currentIndex;
+
+	displayMediaInModalWithTemplate(
+		mediaToDisplay,
+		photographerName,
+		true,
+		prevButton
+	);
 };
 
 const closeMediaModal = () => {
 	const modal = document.getElementById('media-modal-overlay');
+
 	modal.style.display = 'none';
+	document.body.style.overflow = 'visible';
 };
 
 const displayPhotographerData = async (photographer, media) => {
@@ -150,6 +181,9 @@ const displayPhotographerData = async (photographer, media) => {
 		const mediaModel = mediaTemplate(mediaItem, name, false);
 		const mediaCardDOM = mediaModel.getMediaCardDOM();
 		mediaContainer.appendChild(mediaCardDOM);
+		mediaCardDOM.addEventListener('click', (e) =>
+			openMediaModal(e, media, name)
+		);
 	});
 
 	// display info box with likes and price
@@ -160,15 +194,13 @@ const displayPhotographerData = async (photographer, media) => {
 	const modalTitle = document.querySelector('#modal-title');
 	modalTitle.innerHTML += '<br>' + name;
 
-	// Toggle media modal
-	const mediaElts = document.querySelectorAll('.media');
-
-	mediaElts.forEach((mediaElt) => {
-		mediaElt.addEventListener('click', (e) => openMediaModal(e, media, name));
-	});
-
-	prevButton.addEventListener('click', (e) => scrollMedia(e, media, -1));
-	nextButton.addEventListener('click', (e) => scrollMedia(e, media, 1));
+	// Change media in modal
+	prevButton.addEventListener('click', () =>
+		scrollMedia(index, media, name, -1)
+	);
+	nextButton.addEventListener('click', () =>
+		scrollMedia(index, media, name, 1)
+	);
 
 	closeButton.addEventListener('click', closeMediaModal);
 };

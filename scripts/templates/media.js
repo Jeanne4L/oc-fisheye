@@ -1,24 +1,25 @@
-const mediaTemplate = (media, photographerName, modal) => {
+const mediaTemplate = (media, photographerName, isDisplayedInModal) => {
 	const { title, likes } = media;
 
 	function getMediaCardDOM() {
 		const article = document.createElement('article');
 
 		const mediaDescription = document.createElement('div');
-		const mediaTitle = document.createElement('p');
-		const mediaLikes = document.createElement('span');
-
-		article.appendChild(createMedia(media, photographerName));
-
 		mediaDescription.classList.add('media-description');
 
+		const mediaTitle = document.createElement('p');
 		mediaTitle.textContent = title;
 		mediaTitle.classList.add('media-title');
 
+		const mediaLikes = document.createElement('span');
+
+		article.appendChild(
+			createMedia(media, photographerName, isDisplayedInModal)
+		);
 		article.appendChild(mediaDescription);
 		mediaDescription.appendChild(mediaTitle);
 
-		if (!modal) {
+		if (!isDisplayedInModal) {
 			mediaLikes.innerHTML =
 				likes +
 				`<svg width='20px' height='20px' viewBox='0 -1 32 32' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:sketch='http://www.bohemiancoding.com/sketch/ns'>
@@ -36,11 +37,11 @@ const mediaTemplate = (media, photographerName, modal) => {
 	return { media, getMediaCardDOM };
 };
 
-const createMedia = (media, photographerName) => {
+const createMedia = (media, photographerName, isDisplayedInModal) => {
 	if (media.image) {
 		return createImageElt(media, photographerName);
 	} else if (media.video) {
-		return createVideoElt(media, photographerName);
+		return createVideoElt(media, photographerName, isDisplayedInModal);
 	} else {
 		throw new error('Unknown media type');
 	}
@@ -52,13 +53,13 @@ const createImageElt = (media, photographerName) => {
 		media.image
 	}`;
 	img.alt = media.title;
-	img.classList.add('media');
 	img.id = media.id;
+	img.classList.add('media');
 
 	return img;
 };
 
-const createVideoElt = (media, photographerName) => {
+const createVideoElt = (media, photographerName, isDisplayedInModal) => {
 	const video = document.createElement('video');
 	video.src = `../../assets/photographers/${formatName(photographerName)}/${
 		media.video
@@ -67,6 +68,9 @@ const createVideoElt = (media, photographerName) => {
 	video.classList.add('media');
 	video.id = media.id;
 	video.controls = true;
+	if (isDisplayedInModal) {
+		video.autoplay = true;
+	}
 
 	return video;
 };
