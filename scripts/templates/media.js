@@ -39,7 +39,7 @@ const mediaTemplate = (media, photographerName, isDisplayedInModal) => {
 
 const createMedia = (media, photographerName, isDisplayedInModal) => {
 	if (media.image) {
-		return createImageElt(media, photographerName);
+		return createImageElt(media, photographerName, isDisplayedInModal);
 	} else if (media.video) {
 		return createVideoElt(media, photographerName, isDisplayedInModal);
 	} else {
@@ -47,7 +47,7 @@ const createMedia = (media, photographerName, isDisplayedInModal) => {
 	}
 };
 
-const createImageElt = (media, photographerName) => {
+const createImageElt = (media, photographerName, isDisplayedInModal) => {
 	const img = document.createElement('img');
 	img.src = `../../assets/photographers/${formatName(photographerName)}/${
 		media.image
@@ -55,6 +55,30 @@ const createImageElt = (media, photographerName) => {
 	img.alt = media.title;
 	img.id = media.id;
 	img.classList.add('media');
+
+	// Calculate size of image to display in the modal
+	if (isDisplayedInModal) {
+		let width = img.width;
+		let height = img.height;
+
+		let screenWidth = window.innerWidth;
+		let screenHeight = window.innerHeight;
+
+		let imageRatio = width / height;
+
+		let maxSize = Math.min(screenWidth, screenHeight) * 0.8;
+
+		if (width > height) {
+			width = maxSize;
+			height = maxSize / imageRatio;
+		} else {
+			height = maxSize;
+			width = maxSize * imageRatio;
+		}
+
+		img.style.width = width + 'px';
+		img.style.height = height + 'px';
+	}
 
 	return img;
 };

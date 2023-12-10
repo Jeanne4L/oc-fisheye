@@ -157,6 +157,7 @@ h2 {
 .media-modal .media {
 	max-height: 100%;
 	max-width: 100%;
+	object-fit: contain;
 }
 
 #media-prev-button,
