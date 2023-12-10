@@ -1,3 +1,5 @@
+import { mediaTemplate } from '../templates/media.js';
+
 const params = new URL(document.location).searchParams;
 const id = parseInt(params.get('id'));
 
@@ -109,7 +111,6 @@ const displayFiltersList = () => {
 	});
 };
 
-// const contentContainer = document.querySelector('.media-modal-content');
 const closeButton = document.querySelector('#media-close-button');
 const prevButton = document.querySelector('#media-prev-button');
 const nextButton = document.querySelector('#media-next-button');

@@ -1,4 +1,7 @@
-const mediaTemplate = (media, photographerName, isDisplayedInModal) => {
+import { formatNameToFileName } from '../helpers/formatNameToFileName.js';
+import { calculateMediaSizeWithRatio } from '../helpers/calculateMediaSizeWithRatio.js';
+
+export const mediaTemplate = (media, photographerName, isDisplayedInModal) => {
 	const { title, likes } = media;
 
 	function getMediaCardDOM() {
@@ -49,35 +52,15 @@ const createMedia = (media, photographerName, isDisplayedInModal) => {
 
 const createImageElt = (media, photographerName, isDisplayedInModal) => {
 	const img = document.createElement('img');
-	img.src = `../../assets/photographers/${formatName(photographerName)}/${
-		media.image
-	}`;
+	img.src = `../../assets/photographers/${formatNameToFileName(
+		photographerName
+	)}/${media.image}`;
 	img.alt = media.title;
 	img.id = media.id;
 	img.classList.add('media');
 
-	// Calculate size of image to display in the modal
 	if (isDisplayedInModal) {
-		let width = img.width;
-		let height = img.height;
-
-		let screenWidth = window.innerWidth;
-		let screenHeight = window.innerHeight;
-
-		let imageRatio = width / height;
-
-		let maxSize = Math.min(screenWidth, screenHeight) * 0.8;
-
-		if (width > height) {
-			width = maxSize;
-			height = maxSize / imageRatio;
-		} else {
-			height = maxSize;
-			width = maxSize * imageRatio;
-		}
-
-		img.style.width = width + 'px';
-		img.style.height = height + 'px';
+		calculateMediaSizeWithRatio(img, 80);
 	}
 
 	return img;
@@ -85,15 +68,16 @@ const createImageElt = (media, photographerName, isDisplayedInModal) => {
 
 const createVideoElt = (media, photographerName, isDisplayedInModal) => {
 	const video = document.createElement('video');
-	video.src = `../../assets/photographers/${formatName(photographerName)}/${
-		media.video
-	}`;
+	video.src = `../../assets/photographers/${formatNameToFileName(
+		photographerName
+	)}/${media.video}`;
 	video.type = 'video/mp4';
 	video.classList.add('media');
 	video.id = media.id;
 	video.controls = true;
 	if (isDisplayedInModal) {
 		video.autoplay = true;
+		calculateMediaSizeWithRatio(video, 80);
 	}
 
 	return video;
