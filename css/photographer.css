@@ -265,13 +265,22 @@ h2 {
 	margin: 0;
 }
 
-.media-description span {
+.media-likes {
 	display: flex;
 	align-items: center;
 }
 
 .media-description svg {
+	width: 20px;
+	height: 20px;
+	fill: var(--primary-color);
 	margin-left: 5px;
+	cursor: pointer;
+	transition: transform 300ms ease;
+}
+
+.media-description svg:hover {
+	transform: scale(1.2);
 }
 
 .info-box {
