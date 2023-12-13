@@ -1,5 +1,7 @@
 const displayModalButton = document.querySelector('#contact-button');
 const closeModalButton = document.querySelector('#contact-close-button');
+const contactForm = document.querySelector('#contact-form');
+const inputs = contactForm.elements;
 
 const displayModal = () => {
 	const modal = document.getElementById('contact-modal-overlay');
@@ -13,5 +15,16 @@ const closeModal = () => {
 	document.body.style.overflow = 'visible';
 };
 
+const submitForm = (e) => {
+	e.preventDefault();
+
+	for (let i = 0; i < inputs.length; i++) {
+		if (inputs[i].nodeName === 'INPUT' || inputs[i].nodeName === 'TEXTAREA') {
+			console.log(inputs[i].value);
+		}
+	}
+};
+
 displayModalButton.addEventListener('click', displayModal);
 closeModalButton.addEventListener('click', closeModal);
+contactForm.addEventListener('submit', (e) => submitForm(e));

@@ -211,15 +211,6 @@ const displayPhotographerData = async (photographer, media) => {
 
 	displayMedia(media, name);
 
-	// media.forEach((mediaItem) => {
-	// 	const mediaModel = mediaTemplate(mediaItem, name, false);
-	// 	const mediaCardDOM = mediaModel.getMediaCardDOM();
-	// 	mediaContainer.appendChild(mediaCardDOM);
-	// 	mediaCardDOM.addEventListener('click', (e) =>
-	// 		openMediaModal(e, media, name)
-	// 	);
-	// });
-
 	// display info box with likes and price
 	const main = document.querySelector('main');
 	main.appendChild(displayInfoBox(media, price));
