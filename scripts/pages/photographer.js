@@ -1,9 +1,17 @@
 import { mediaTemplate } from '../templates/media.js';
 
+const toggleFiltersListButton = document.querySelector('#sort-button');
+const sortFiltersList = document.querySelector('#sort-filters');
+const mediaContainer = document.querySelector('#medias');
+const closeButton = document.querySelector('#media-close-button');
+const prevButton = document.querySelector('#media-prev-button');
+const nextButton = document.querySelector('#media-next-button');
+let currentMedia = null;
+let index;
+
+// Get id in url
 const params = new URL(document.location).searchParams;
 const id = parseInt(params.get('id'));
-
-let currentMedia = null;
 
 const getPhotographer = async () => {
 	try {
@@ -18,7 +26,18 @@ const getPhotographer = async () => {
 	}
 };
 
-const displayMediaInModalWithTemplate = (
+const displayMedia = (media, photographerName) => {
+	media.forEach((mediaItem) => {
+		const mediaModel = mediaTemplate(mediaItem, photographerName, false);
+		const mediaCardDOM = mediaModel.getMediaCardDOM();
+		mediaContainer.appendChild(mediaCardDOM);
+		mediaCardDOM.addEventListener('click', (e) =>
+			openMediaModal(e, media, photographerName)
+		);
+	});
+};
+
+const displaySelectedMediaInModal = (
 	mediaToDisplay,
 	photographerName,
 	isDisplayedInModal,
@@ -101,23 +120,37 @@ const displayInfoBox = (media, price) => {
 	return infoBox;
 };
 
-const displayFiltersList = () => {
-	const displayFiltersListButton = document.querySelector('#sort-button');
-	const sortFiltersList = document.querySelector('#sort-filters');
-
-	displayFiltersListButton.addEventListener('click', () => {
-		displayFiltersListButton.classList.toggle('returned-button');
+const toggleFiltersList = () => {
+	toggleFiltersListButton.addEventListener('click', () => {
+		toggleFiltersListButton.classList.toggle('returned-button');
 		sortFiltersList.classList.toggle('displayed-list');
 	});
 };
 
-const closeButton = document.querySelector('#media-close-button');
-const prevButton = document.querySelector('#media-prev-button');
-const nextButton = document.querySelector('#media-next-button');
-let index;
+const sortMedias = (media, photographerName) => {
+	sortFiltersList.addEventListener('click', function (e) {
+		const filter = e.target;
+		let sortedMedia;
 
-const modalImg = document.createElement('img');
-const modalVideo = document.createElement('video');
+		if (filter.tagName === 'LI') {
+			if (filter.id === 'sort-popularity') {
+				sortedMedia = media.sort((a, b) => a.likes - b.likes);
+			} else if (filter.id === 'sort-date') {
+				sortedMedia = media.sort((a, b) => {
+					const dateA = new Date(a.date);
+					const dateB = new Date(b.date);
+					return dateA - dateB;
+				});
+			} else if (filter.id === 'sort-title') {
+				sortedMedia = media.sort((a, b) =>
+					a.title.localeCompare(b.title, 'en', { ignorePunctuation: true })
+				);
+			}
+			mediaContainer.innerHTML = '';
+			displayMedia(sortedMedia, photographerName);
+		}
+	});
+};
 
 const openMediaModal = (e, media, photographerName) => {
 	const modal = document.getElementById('media-modal-overlay');
@@ -127,7 +160,7 @@ const openMediaModal = (e, media, photographerName) => {
 	const displayedMedia = media.find((med) => med.id === Number(e.target.id));
 	index = media.indexOf(displayedMedia);
 
-	displayMediaInModalWithTemplate(
+	displaySelectedMediaInModal(
 		displayedMedia,
 		photographerName,
 		true,
@@ -142,7 +175,7 @@ const scrollMedia = (currentIndex, media, photographerName, direction) => {
 
 	index = currentIndex;
 
-	displayMediaInModalWithTemplate(
+	displaySelectedMediaInModal(
 		mediaToDisplay,
 		photographerName,
 		true,
@@ -173,19 +206,19 @@ const displayPhotographerData = async (photographer, media) => {
 	banner.prepend(displayPhotographerDescription(name, tagline, city, country));
 	banner.appendChild(photographerImg);
 
-	// display media with the template
-	const mediaContainer = document.querySelector('#medias');
+	toggleFiltersList();
+	sortMedias(media, name);
 
-	displayFiltersList();
+	displayMedia(media, name);
 
-	media.forEach((mediaItem) => {
-		const mediaModel = mediaTemplate(mediaItem, name, false);
-		const mediaCardDOM = mediaModel.getMediaCardDOM();
-		mediaContainer.appendChild(mediaCardDOM);
-		mediaCardDOM.addEventListener('click', (e) =>
-			openMediaModal(e, media, name)
-		);
-	});
+	// media.forEach((mediaItem) => {
+	// 	const mediaModel = mediaTemplate(mediaItem, name, false);
+	// 	const mediaCardDOM = mediaModel.getMediaCardDOM();
+	// 	mediaContainer.appendChild(mediaCardDOM);
+	// 	mediaCardDOM.addEventListener('click', (e) =>
+	// 		openMediaModal(e, media, name)
+	// 	);
+	// });
 
 	// display info box with likes and price
 	const main = document.querySelector('main');
