@@ -153,6 +153,8 @@ const sortMedias = (media, photographerName) => {
 };
 
 const openMediaModal = (e, media, photographerName) => {
+	e.preventDefault();
+
 	const modal = document.getElementById('media-modal-overlay');
 	modal.style.display = 'flex';
 	document.body.style.overflow = 'hidden';
