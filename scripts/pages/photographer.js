@@ -1,8 +1,12 @@
 import { mediaTemplate } from '../templates/media.js';
+import contactForm from '../utils/contactForm.js';
+import { focusTrap, cancelFocusTrap } from '../helpers/focusTrap.js';
 
 const toggleFiltersListButton = document.querySelector('#sort-button');
 const sortFiltersList = document.querySelector('#sort-filters');
+const activeFiltersOptions = document.querySelectorAll('.sort-filters-option');
 const mediaContainer = document.querySelector('#medias');
+const mediaModal = document.getElementById('media-modal-overlay');
 const closeButton = document.querySelector('#media-close-button');
 const prevButton = document.querySelector('#media-prev-button');
 const nextButton = document.querySelector('#media-next-button');
@@ -34,6 +38,13 @@ const displayMedia = (media, photographerName) => {
 		mediaCardDOM.addEventListener('click', (e) =>
 			openMediaModal(e, media, photographerName)
 		);
+		mediaCardDOM.addEventListener('keydown', (e) => {
+			if (e.key == 'Enter') {
+				openMediaModal(e, media, photographerName);
+			}
+		});
+		mediaCardDOM.setAttribute('tabindex', '0');
+		mediaCardDOM.setAttribute('role', 'button');
 	});
 };
 
@@ -70,18 +81,41 @@ const calculateTotalCountOfLikes = (media) => {
 };
 
 const displayTotalLikes = (media) => {
-	const totalLikes = document.createElement('span');
+	const totalLikes = document.createElement('div');
+	const totalLikesCount = document.createElement('span');
 	totalLikes.classList.add('total-likes');
-	totalLikes.innerHTML =
-		calculateTotalCountOfLikes(media) +
-		`<svg width='20px' height='20px' viewBox='0 -1 32 32' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:sketch='http://www.bohemiancoding.com/sketch/ns'>
-            <g id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' sketch:type='MSPage'>
-                <g id='Icon-Set-Filled' sketch:type='MSLayerGroup' transform='translate(-102.000000, -882.000000)' fill='#000'>
-                    <path d='M126,882 C122.667,882 119.982,883.842 117.969,886.235 C116.013,883.76 113.333,882 110,882 C105.306,882 102,886.036 102,890.438 C102,892.799 102.967,894.499 104.026,896.097 L116.459,911.003 C117.854,912.312 118.118,912.312 119.513,911.003 L131.974,896.097 C133.22,894.499 134,892.799 134,890.438 C134,886.036 130.694,882 126,882' id='heart-like' sketch:type='MSShapeGroup'>
-                </path>
-            </g>
-        </g>
-    </svg>`;
+
+	const totalLikesIcon = document.createElementNS(
+		'http://www.w3.org/2000/svg',
+		'svg'
+	);
+	totalLikesIcon.setAttribute('viewBox', '0 -1 32 32');
+
+	const groupElement = document.createElementNS(
+		'http://www.w3.org/2000/svg',
+		'g'
+	);
+	groupElement.setAttribute('aria-label', 'likes');
+	groupElement.setAttribute('transform', 'translate(-102.000000, -882.000000)');
+	groupElement.setAttribute('fill', '#000');
+
+	const pathElement = document.createElementNS(
+		'http://www.w3.org/2000/svg',
+		'path'
+	);
+	pathElement.setAttribute(
+		'd',
+		'M126,882 C122.667,882 119.982,883.842 117.969,886.235 C116.013,883.76 113.333,882 110,882 C105.306,882 102,886.036 102,890.438 C102,892.799 102.967,894.499 104.026,896.097 L116.459,911.003 C117.854,912.312 118.118,912.312 119.513,911.003 L131.974,896.097 C133.22,894.499 134,892.799 134,890.438 C134,886.036 130.694,882 126,882'
+	);
+	pathElement.setAttribute('sketch:type', 'MSShapeGroup');
+
+	totalLikesIcon.appendChild(groupElement);
+	groupElement.appendChild(pathElement);
+
+	totalLikesCount.textContent = calculateTotalCountOfLikes(media);
+	totalLikes.appendChild(totalLikesCount);
+	totalLikes.appendChild(totalLikesIcon);
+
 	return totalLikes;
 };
 
@@ -121,42 +155,78 @@ const displayInfoBox = (media, price) => {
 };
 
 const toggleFiltersList = () => {
-	toggleFiltersListButton.addEventListener('click', () => {
-		toggleFiltersListButton.classList.toggle('returned-button');
-		sortFiltersList.classList.toggle('displayed-list');
-	});
+	toggleFiltersListButton.classList.toggle('returned-button');
+	if (toggleFiltersListButton.getAttribute('aria-expanded') == 'false') {
+		toggleFiltersListButton.setAttribute('aria-expanded', 'true');
+	} else {
+		toggleFiltersListButton.setAttribute('aria-expanded', 'false');
+	}
+
+	sortFiltersList.classList.toggle('displayed-list');
+
+	focusTrap(
+		toggleFiltersListButton,
+		activeFiltersOptions[activeFiltersOptions.length - 1]
+	);
 };
 
-const sortMedias = (media, photographerName) => {
+const sortMedias = (media, photographerName, filter) => {
+	let sortedMedia;
+
+	if (filter.tagName === 'LI') {
+		if (filter.id === 'sort-popularity') {
+			sortedMedia = media.sort((a, b) => b.likes - a.likes);
+		} else if (filter.id === 'sort-date') {
+			sortedMedia = media.sort((a, b) => {
+				const dateA = new Date(a.date);
+				const dateB = new Date(b.date);
+				return dateA - dateB;
+			});
+		} else if (filter.id === 'sort-title') {
+			sortedMedia = media.sort((a, b) =>
+				a.title.localeCompare(b.title, 'en', { ignorePunctuation: true })
+			);
+		}
+		mediaContainer.innerHTML = '';
+		displayMedia(sortedMedia, photographerName);
+		cancelFocusTrap(
+			toggleFiltersListButton,
+			activeFiltersOptions[activeFiltersOptions.length - 1]
+		);
+		toggleFiltersList();
+	}
+};
+
+const sortMediasEvent = (media, photographerName) => {
+	activeFiltersOptions.forEach((activeFiltersOption) => {
+		activeFiltersOption.addEventListener('focus', (e) => {
+			const selectedFilter = e.target;
+			selectedFilter.setAttribute('aria-selected', 'true');
+		});
+
+		activeFiltersOption.addEventListener('blur', (e) => {
+			const selectedFilter = e.target;
+			selectedFilter.setAttribute('aria-selected', 'false');
+		});
+	});
+
 	sortFiltersList.addEventListener('click', function (e) {
 		const filter = e.target;
-		let sortedMedia;
+		sortMedias(media, photographerName, filter);
+	});
 
-		if (filter.tagName === 'LI') {
-			if (filter.id === 'sort-popularity') {
-				sortedMedia = media.sort((a, b) => a.likes - b.likes);
-			} else if (filter.id === 'sort-date') {
-				sortedMedia = media.sort((a, b) => {
-					const dateA = new Date(a.date);
-					const dateB = new Date(b.date);
-					return dateA - dateB;
-				});
-			} else if (filter.id === 'sort-title') {
-				sortedMedia = media.sort((a, b) =>
-					a.title.localeCompare(b.title, 'en', { ignorePunctuation: true })
-				);
-			}
-			mediaContainer.innerHTML = '';
-			displayMedia(sortedMedia, photographerName);
+	sortFiltersList.addEventListener('keydown', function (e) {
+		if (e.key == 'Enter') {
+			const filter = e.target;
+			sortMedias(media, photographerName, filter);
 		}
 	});
 };
 
-const openMediaModal = (e, media, photographerName) => {
+export const openMediaModal = (e, media, photographerName) => {
 	e.preventDefault();
 
-	const modal = document.getElementById('media-modal-overlay');
-	modal.style.display = 'flex';
+	mediaModal.style.display = 'flex';
 	document.body.style.overflow = 'hidden';
 
 	const displayedMedia = media.find((med) => med.id === Number(e.target.id));
@@ -168,6 +238,10 @@ const openMediaModal = (e, media, photographerName) => {
 		true,
 		prevButton
 	);
+
+	nextButton.focus();
+
+	focusTrap(closeButton, nextButton);
 };
 
 const scrollMedia = (currentIndex, media, photographerName, direction) => {
@@ -186,10 +260,10 @@ const scrollMedia = (currentIndex, media, photographerName, direction) => {
 };
 
 const closeMediaModal = () => {
-	const modal = document.getElementById('media-modal-overlay');
-
-	modal.style.display = 'none';
+	mediaModal.style.display = 'none';
 	document.body.style.overflow = 'visible';
+
+	cancelFocusTrap(closeButton, nextButton);
 };
 
 const displayPhotographerData = async (photographer, media) => {
@@ -208,8 +282,16 @@ const displayPhotographerData = async (photographer, media) => {
 	banner.prepend(displayPhotographerDescription(name, tagline, city, country));
 	banner.appendChild(photographerImg);
 
-	toggleFiltersList();
-	sortMedias(media, name);
+	contactForm();
+
+	toggleFiltersListButton.addEventListener('click', () => toggleFiltersList());
+	toggleFiltersListButton.addEventListener('keydown', (e) => {
+		if (e.key == 'Enter') {
+			toggleFiltersList();
+		}
+	});
+
+	sortMediasEvent(media, name);
 
 	displayMedia(media, name);
 
@@ -225,11 +307,26 @@ const displayPhotographerData = async (photographer, media) => {
 	prevButton.addEventListener('click', () =>
 		scrollMedia(index, media, name, -1)
 	);
+	prevButton.addEventListener('keydown', (e) => {
+		if (e.key == 'Enter') {
+			scrollMedia(index, media, name, -1);
+		}
+	});
 	nextButton.addEventListener('click', () =>
 		scrollMedia(index, media, name, 1)
 	);
+	nextButton.addEventListener('keydown', (e) => {
+		if (e.key == 'Enter') {
+			scrollMedia(index, media, name, 1);
+		}
+	});
 
 	closeButton.addEventListener('click', closeMediaModal);
+	closeButton.addEventListener('keydown', (e) => {
+		if (e.key == 'Enter') {
+			closeMediaModal();
+		}
+	});
 };
 
 const init = async () => {
