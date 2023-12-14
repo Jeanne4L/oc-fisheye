@@ -9,6 +9,7 @@ export const photographerTemplate = (data) => {
 
 		const link = document.createElement('a');
 		link.href = `photographer.html?id=${id}`;
+		link.setAttribute('aria-label', `Voir la page de ${name}`);
 
 		img.src = picture;
 		img.alt = name;

@@ -47,6 +47,12 @@ h2 {
 	cursor: pointer;
 }
 
+.contact-button:hover,
+.contact-button:focus {
+	background-color: var(--tertiary-color);
+	color: #000;
+}
+
 /*          MODAL            */
 #contact-modal-overlay,
 #media-modal-overlay {
@@ -192,7 +198,8 @@ h2 {
 	color: white;
 	margin: 0;
 	padding: 0;
-	height: 54px;
+	min-width: 160px;
+	height: 53px;
 	overflow: hidden;
 	list-style-type: none;
 	border-radius: 5px;
@@ -221,8 +228,11 @@ h2 {
 }
 
 .sort-button {
-	margin-left: 15px;
+	position: absolute;
+	right: 15px;
+	top: 15px;
 	transition: transform 300ms;
+	cursor: pointer;
 }
 
 .returned-button {
@@ -304,6 +314,8 @@ h2 {
 
 .total-likes svg {
 	margin-left: 8px;
+	width: 20px;
+	height: 20px;
 }
 
 .info-box .tariff {

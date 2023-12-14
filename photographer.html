@@ -14,8 +14,8 @@
 	</head>
 	<body>
 		<header>
-			<a href="index.html">
-				<img src="assets/images/logo.png" class="logo" />
+			<a href="index.html" aria-label="Revenir à la page d'accueil">
+				<img src="assets/images/logo.png" class="logo" alt="fisheye logo" />
 			</a>
 		</header>
 		<main>
@@ -26,41 +26,77 @@
 			</div>
 			<!-- MEDIAS -->
 			<div class="sort-form">
-				<span class="sort-label">Trier par</span>
-				<ul id="sort-filters" class="sort-filters">
-					<li id="sort-popularity">
+				<span class="sort-label" id="buttonLabel">Trier par</span>
+				<ul
+					id="sort-filters"
+					class="sort-filters"
+					role="listbox"
+					aria-activedescendant="sort-popularity"
+				>
+					<svg
+						tabindex="0"
+						role="button"
+						aria-labelledby="buttonLabel"
+						aria-haspopup="listbox"
+						aria-expanded="false"
+						width="25px"
+						height="25px"
+						id="sort-button"
+						class="sort-button"
+						viewBox="0 0 24 24"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M11.9999 13.9394L17.4696 8.46973L18.5303 9.53039L11.9999 16.0607L5.46961 9.53039L6.53027 8.46973L11.9999 13.9394Z"
+							fill="#fff"
+						/>
+					</svg>
+					<li
+						class="sort-filters-option"
+						id="sort-popularity"
+						tabindex="0"
+						role="option"
+					>
 						Popularité
-						<svg
-							width="25px"
-							height="25px"
-							id="sort-button"
-							class="sort-button"
-							viewBox="0 0 24 24"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path
-								fill-rule="evenodd"
-								clip-rule="evenodd"
-								d="M11.9999 13.9394L17.4696 8.46973L18.5303 9.53039L11.9999 16.0607L5.46961 9.53039L6.53027 8.46973L11.9999 13.9394Z"
-								fill="#fff"
-							/>
-						</svg>
 					</li>
-					<li id="sort-date">Date</li>
-					<li id="sort-title">Titre</li>
+					<li
+						class="sort-filters-option"
+						id="sort-date"
+						tabindex="0"
+						role="option"
+					>
+						Date
+					</li>
+					<li
+						class="sort-filters-option"
+						id="sort-title"
+						tabindex="0"
+						role="option"
+					>
+						Titre
+					</li>
 				</ul>
 			</div>
 			<div id="medias"></div>
 		</main>
 		<div id="contact-modal-overlay">
-			<div class="modal contact-modal">
+			<div
+				class="modal contact-modal"
+				role="dialog"
+				aria-label="modale de contact"
+			>
 				<div class="modal-header">
 					<h2 id="modal-title">Contactez-moi</h2>
 					<img
 						src="assets/icons/close.svg"
 						id="contact-close-button"
 						class="close-button"
+						tabindex="0"
+						role="button"
+						aria-label="fermer la modale"
 					/>
 				</div>
 				<form id="contact-form">
@@ -82,8 +118,15 @@
 		</div>
 
 		<div id="media-modal-overlay">
-			<div class="modal media-modal">
+			<div
+				class="modal media-modal"
+				role="dialog"
+				aria-label="modale d'affichage des médias'"
+			>
 				<svg
+					tabindex="0"
+					role="button"
+					aria-label="fermer la modale"
 					id="media-close-button"
 					class="close-button"
 					width="25"
@@ -98,6 +141,9 @@
 					/>
 				</svg>
 				<svg
+					tabindex="0"
+					role="button"
+					aria-label="voir le média précédent"
 					id="media-prev-button"
 					fill="#000000"
 					width="30px"
@@ -111,6 +157,9 @@
 					/>
 				</svg>
 				<svg
+					tabindex="0"
+					role="button"
+					aria-label="voir le média suivant"
 					id="media-next-button"
 					fill="#000000"
 					width="30px"
