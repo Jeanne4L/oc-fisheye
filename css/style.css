@@ -39,3 +39,10 @@ header {
 .logo {
 	height: 50px;
 }
+
+svg[role='button']:focus:not(.sort-button),
+svg[role='button']:hover:not(.sort-button) {
+	outline: none;
+	scale: 1.5;
+	cursor: pointer;
+}
