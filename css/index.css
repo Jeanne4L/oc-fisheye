@@ -52,12 +52,13 @@ main {
 }
 
 .tagline {
-	font-size: 10px;
+	font-size: 13px;
+	text-align: center;
 }
 
 .tariff {
 	color: var(--gray-color);
-	font-size: 9px;
+	font-size: 12px;
 }
 
 @media (max-width: 800px) {
@@ -66,9 +67,12 @@ main {
 		padding: 20px 5% 0 5%;
 	}
 
-	.logo,
-	h1 {
+	.logo {
 		margin: 0;
+	}
+
+	h1 {
+		margin: 10px 0 0 0;
 	}
 
 	.photographer_section {

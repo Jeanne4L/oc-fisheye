@@ -12,7 +12,7 @@ export const photographerTemplate = (data) => {
 		link.setAttribute('aria-label', `Voir la page de ${name}`);
 
 		img.src = picture;
-		img.alt = name;
+		img.alt = '';
 		img.loading = 'lazy';
 
 		const h2 = document.createElement('h2');
