@@ -25,6 +25,10 @@ const contactForm = () => {
 		contactForm.reset();
 
 		cancelFocusTrap(closeModalButton, sendButton);
+
+		setTimeout(() => {
+			displayModalButton.focus();
+		}, 0);
 	};
 
 	const submitForm = (e) => {

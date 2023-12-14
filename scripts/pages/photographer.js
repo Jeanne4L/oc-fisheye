@@ -10,6 +10,7 @@ const mediaModal = document.getElementById('media-modal-overlay');
 const closeButton = document.querySelector('#media-close-button');
 const prevButton = document.querySelector('#media-prev-button');
 const nextButton = document.querySelector('#media-next-button');
+let clickedMedia = null;
 let currentMedia = null;
 let index;
 
@@ -30,7 +31,7 @@ const getPhotographer = async () => {
 	}
 };
 
-const displayMedia = (media, photographerName) => {
+const displayMedias = (media, photographerName) => {
 	media.forEach((mediaItem) => {
 		const mediaModel = mediaTemplate(mediaItem, photographerName, false);
 		const mediaCardDOM = mediaModel.getMediaCardDOM();
@@ -43,8 +44,8 @@ const displayMedia = (media, photographerName) => {
 				openMediaModal(e, media, photographerName);
 			}
 		});
-		mediaCardDOM.setAttribute('tabindex', '0');
-		mediaCardDOM.setAttribute('role', 'button');
+		// mediaCardDOM.setAttribute('tabindex', '0');
+		// mediaCardDOM.setAttribute('role', 'button');
 	});
 };
 
@@ -188,7 +189,7 @@ const sortMedias = (media, photographerName, filter) => {
 			);
 		}
 		mediaContainer.innerHTML = '';
-		displayMedia(sortedMedia, photographerName);
+		displayMedias(sortedMedia, photographerName);
 		cancelFocusTrap(
 			toggleFiltersListButton,
 			activeFiltersOptions[activeFiltersOptions.length - 1]
@@ -224,6 +225,8 @@ const sortMediasEvent = (media, photographerName) => {
 };
 
 export const openMediaModal = (e, media, photographerName) => {
+	clickedMedia = e.target;
+
 	e.preventDefault();
 
 	mediaModal.style.display = 'flex';
@@ -264,6 +267,12 @@ const closeMediaModal = () => {
 	document.body.style.overflow = 'visible';
 
 	cancelFocusTrap(closeButton, nextButton);
+
+	if (clickedMedia) {
+		setTimeout(() => {
+			clickedMedia.focus();
+		}, 0);
+	}
 };
 
 const displayPhotographerData = async (photographer, media) => {
@@ -289,11 +298,20 @@ const displayPhotographerData = async (photographer, media) => {
 		if (e.key == 'Enter') {
 			toggleFiltersList();
 		}
+		if (toggleFiltersListButton.getAttribute('aria-expanded') == 'false') {
+			activeFiltersOptions.forEach((filter) =>
+				filter.setAttribute('tabindex', '-1')
+			);
+		} else {
+			activeFiltersOptions.forEach((filter) =>
+				filter.setAttribute('tabindex', '0')
+			);
+		}
 	});
 
 	sortMediasEvent(media, name);
 
-	displayMedia(media, name);
+	displayMedias(media, name);
 
 	// display info box with likes and price
 	const main = document.querySelector('main');

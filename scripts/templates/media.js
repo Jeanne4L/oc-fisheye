@@ -88,6 +88,8 @@ const createImageElt = (media, photographerName, isDisplayedInModal) => {
 	img.alt = media.title;
 	img.id = media.id;
 	img.classList.add('media');
+	img.setAttribute('tabindex', '0');
+	img.setAttribute('role', 'button');
 
 	if (isDisplayedInModal) {
 		calculateMediaSizeWithRatio(img, 80);
@@ -104,6 +106,8 @@ const createVideoElt = (media, photographerName, isDisplayedInModal) => {
 	video.type = 'video/mp4';
 	video.classList.add('media');
 	video.id = media.id;
+	video.setAttribute('tabindex', '0');
+	video.setAttribute('role', 'button');
 	video.controls = true;
 	if (isDisplayedInModal) {
 		video.autoplay = true;
