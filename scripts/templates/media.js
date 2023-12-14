@@ -5,22 +5,24 @@ import heartIcon from '../components/heartIcon.js';
 export const mediaTemplate = (media, photographerName, isDisplayedInModal) => {
 	const { title, likes } = media;
 
-	function getMediaCardDOM() {
+	const getMediaCardDOM = () => {
 		const article = document.createElement('article');
 
 		const mediaDescription = document.createElement('div');
 		mediaDescription.classList.add('media-description');
 
-		const mediaTitle = document.createElement('p');
+		const mediaTitle = document.createElement('h3');
 		mediaTitle.textContent = title;
-		mediaTitle.classList.add('media-title');
 
 		const mediaLikes = document.createElement('div');
 		mediaLikes.classList.add('media-likes');
 		const likesCount = document.createElement('span');
+		likesCount.classList.add('likes-count');
 
 		const likesIcon = heartIcon('#901c1c');
-		likesIcon.addEventListener('click', incrementLikes);
+		likesIcon.setAttribute('tabindex', '0');
+		likesIcon.setAttribute('role', 'button');
+		likesIcon.classList.add('likes-button');
 
 		article.appendChild(
 			createMedia(media, photographerName, isDisplayedInModal)
@@ -30,17 +32,14 @@ export const mediaTemplate = (media, photographerName, isDisplayedInModal) => {
 
 		if (!isDisplayedInModal) {
 			likesCount.textContent = likes;
+
 			mediaLikes.appendChild(likesCount);
 			mediaLikes.appendChild(likesIcon);
 			mediaDescription.appendChild(mediaLikes);
 		}
 
-		function incrementLikes() {
-			likesCount.textContent = likes + 1;
-		}
-
 		return article;
-	}
+	};
 	return { media, getMediaCardDOM };
 };
 
@@ -62,8 +61,11 @@ const createImageElt = (media, photographerName, isDisplayedInModal) => {
 	img.alt = media.title;
 	img.id = media.id;
 	img.classList.add('media');
-	img.setAttribute('tabindex', '0');
-	img.setAttribute('role', 'button');
+
+	if (!isDisplayedInModal) {
+		img.setAttribute('tabindex', '0');
+		img.setAttribute('role', 'button');
+	}
 
 	if (isDisplayedInModal) {
 		calculateMediaSizeWithRatio(img, 80);
@@ -80,9 +82,14 @@ const createVideoElt = (media, photographerName, isDisplayedInModal) => {
 	video.type = 'video/mp4';
 	video.classList.add('media');
 	video.id = media.id;
-	video.setAttribute('tabindex', '0');
-	video.setAttribute('role', 'button');
+
 	video.controls = true;
+
+	if (!isDisplayedInModal) {
+		video.setAttribute('tabindex', '0');
+		video.setAttribute('role', 'button');
+	}
+
 	if (isDisplayedInModal) {
 		video.autoplay = true;
 		calculateMediaSizeWithRatio(video, 80);

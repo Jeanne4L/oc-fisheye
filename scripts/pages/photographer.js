@@ -13,6 +13,7 @@ const prevButton = document.querySelector('#media-prev-button');
 const nextButton = document.querySelector('#media-next-button');
 let clickedMedia = null;
 let currentMedia = null;
+let totalLikesCount = 0;
 let index;
 
 // Get id in url
@@ -33,16 +34,37 @@ const getPhotographer = async () => {
 };
 
 const displayMedias = (media, photographerName) => {
+	totalLikesCount = calculateTotalCountOfLikes(media);
+
 	media.forEach((mediaItem) => {
 		const mediaModel = mediaTemplate(mediaItem, photographerName, false);
 		const mediaCardDOM = mediaModel.getMediaCardDOM();
 		mediaContainer.appendChild(mediaCardDOM);
-		mediaCardDOM.addEventListener('click', (e) =>
-			openMediaModal(e, media, photographerName)
-		);
-		mediaCardDOM.addEventListener('keydown', (e) => {
-			if (e.key == 'Enter') {
+
+		mediaCardDOM.addEventListener('click', (e) => {
+			if (e.target.classList.contains('media')) {
 				openMediaModal(e, media, photographerName);
+			}
+			if (e.target.closest('svg').classList.contains('likes-button')) {
+				const newLikesCount = incrementLikes(mediaItem.likes);
+				totalLikesCount = incrementLikes(totalLikesCount);
+				mediaCardDOM.querySelector('.likes-count').textContent = newLikesCount;
+				document.querySelector('.total-likes').textContent = totalLikesCount;
+
+				e.target.closest('svg').classList.remove('likes-button');
+			}
+		});
+		mediaCardDOM.addEventListener('keydown', (e) => {
+			if (e.target.classList.contains('media') && e.key == 'Enter') {
+				openMediaModal(e, media, photographerName);
+			}
+			if (e.target.classList.contains('likes-button') && e.key == 'Enter') {
+				const newLikesCount = incrementLikes(mediaItem.likes);
+				totalLikesCount = incrementLikes(totalLikesCount);
+				mediaCardDOM.querySelector('.likes-count').textContent = newLikesCount;
+				document.querySelector('.total-likes').textContent = totalLikesCount;
+
+				e.target.closest('svg').classList.remove('likes-button');
 			}
 		});
 	});
@@ -72,24 +94,32 @@ const displaySelectedMediaInModal = (
 	);
 };
 
+const incrementLikes = (likesCount) => {
+	const likes = (likesCount += 1);
+
+	return likes;
+};
+
 const calculateTotalCountOfLikes = (media) => {
 	let total = 0;
-	media.forEach((m) => {
-		total += m.likes;
+	media.forEach((mediaItem) => {
+		total += mediaItem.likes;
 	});
 	return total;
 };
 
-const displayTotalLikes = (media) => {
-	const totalLikes = document.createElement('div');
-	const totalLikesCount = document.createElement('span');
-	totalLikes.classList.add('total-likes');
+const displayTotalLikes = () => {
+	const totalLikesDiv = document.createElement('div');
+	totalLikesDiv.classList.add('total-likes-container');
 
-	totalLikesCount.textContent = calculateTotalCountOfLikes(media);
-	totalLikes.appendChild(totalLikesCount);
-	totalLikes.appendChild(heartIcon('#000'));
+	const totalLikesCountDiv = document.createElement('span');
+	totalLikesCountDiv.classList.add('total-likes');
 
-	return totalLikes;
+	totalLikesCountDiv.textContent = totalLikesCount;
+	totalLikesDiv.appendChild(totalLikesCountDiv);
+	totalLikesDiv.appendChild(heartIcon('#000'));
+
+	return totalLikesDiv;
 };
 
 const displayPhotographerDescription = (name, tagline, city, country) => {
@@ -113,7 +143,7 @@ const displayPhotographerDescription = (name, tagline, city, country) => {
 	return photographerDescription;
 };
 
-const displayInfoBox = (media, price) => {
+const displayInfoBox = (price) => {
 	const infoBox = document.createElement('div');
 	infoBox.classList.add('info-box');
 
@@ -121,7 +151,7 @@ const displayInfoBox = (media, price) => {
 	tariff.textContent = `${price}€ / jour`;
 	tariff.classList.add('tariff');
 
-	infoBox.appendChild(displayTotalLikes(media));
+	infoBox.appendChild(displayTotalLikes());
 	infoBox.appendChild(tariff);
 
 	return infoBox;
@@ -136,6 +166,9 @@ const toggleFiltersList = () => {
 	}
 
 	sortFiltersList.classList.toggle('displayed-list');
+	activeFiltersOptions.forEach((filter) =>
+		filter.classList.toggle('no-clickable')
+	);
 
 	focusTrap(
 		toggleFiltersListButton,
@@ -183,12 +216,12 @@ const sortMediasEvent = (media, photographerName) => {
 		});
 	});
 
-	sortFiltersList.addEventListener('click', function (e) {
+	sortFiltersList.addEventListener('click', (e) => {
 		const filter = e.target;
 		sortMedias(media, photographerName, filter);
 	});
 
-	sortFiltersList.addEventListener('keydown', function (e) {
+	sortFiltersList.addEventListener('keydown', (e) => {
 		if (e.key == 'Enter') {
 			const filter = e.target;
 			sortMedias(media, photographerName, filter);
@@ -265,7 +298,19 @@ const displayPhotographerData = async (photographer, media) => {
 
 	contactForm();
 
-	toggleFiltersListButton.addEventListener('click', () => toggleFiltersList());
+	if (toggleFiltersListButton.getAttribute('aria-expanded') == 'false') {
+		activeFiltersOptions.forEach((filter) =>
+			filter.classList.add('no-clickable')
+		);
+	}
+	toggleFiltersListButton.addEventListener('click', () => {
+		// activeFiltersOptions.forEach((filter) => {
+		// 	filter.classList.toggle('no-clickable');
+		// });
+
+		toggleFiltersList();
+	});
+
 	toggleFiltersListButton.addEventListener('keydown', (e) => {
 		if (e.key == 'Enter') {
 			toggleFiltersList();
@@ -275,9 +320,9 @@ const displayPhotographerData = async (photographer, media) => {
 				filter.setAttribute('tabindex', '-1')
 			);
 		} else {
-			activeFiltersOptions.forEach((filter) =>
-				filter.setAttribute('tabindex', '0')
-			);
+			activeFiltersOptions.forEach((filter) => {
+				filter.setAttribute('tabindex', '0');
+			});
 		}
 	});
 
@@ -287,7 +332,7 @@ const displayPhotographerData = async (photographer, media) => {
 
 	// display info box with likes and price
 	const main = document.querySelector('main');
-	main.appendChild(displayInfoBox(media, price));
+	main.appendChild(displayInfoBox(price));
 
 	// display photographer name in the contact modal
 	const modalTitle = document.querySelector('#modal-title');
