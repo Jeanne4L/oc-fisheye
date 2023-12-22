@@ -42,29 +42,20 @@ const displayMedias = (media, photographerName) => {
 		mediaContainer.appendChild(mediaCardDOM);
 
 		mediaCardDOM.addEventListener('click', (e) => {
-			if (e.target.classList.contains('media')) {
-				openMediaModal(e, media, photographerName);
+			if (
+				e.target.closest('svg') &&
+				e.target.closest('svg').classList.contains('likes-button')
+			) {
+				incrementLikes(e, mediaItem, mediaCardDOM);
 			}
-			if (e.target.closest('svg').classList.contains('likes-button')) {
-				const newLikesCount = incrementLikes(mediaItem.likes);
-				totalLikesCount = incrementLikes(totalLikesCount);
-				mediaCardDOM.querySelector('.likes-count').textContent = newLikesCount;
-				document.querySelector('.total-likes').textContent = totalLikesCount;
-
-				e.target.closest('svg').classList.remove('likes-button');
-			}
+			openMediaModal(e, media, photographerName);
 		});
 		mediaCardDOM.addEventListener('keydown', (e) => {
-			if (e.target.classList.contains('media') && e.key == 'Enter') {
+			if (e.key == 'Enter') {
 				openMediaModal(e, media, photographerName);
 			}
 			if (e.target.classList.contains('likes-button') && e.key == 'Enter') {
-				const newLikesCount = incrementLikes(mediaItem.likes);
-				totalLikesCount = incrementLikes(totalLikesCount);
-				mediaCardDOM.querySelector('.likes-count').textContent = newLikesCount;
-				document.querySelector('.total-likes').textContent = totalLikesCount;
-
-				e.target.closest('svg').classList.remove('likes-button');
+				incrementLikes(e, mediaItem, mediaCardDOM);
 			}
 		});
 	});
@@ -94,10 +85,13 @@ const displaySelectedMediaInModal = (
 	);
 };
 
-const incrementLikes = (likesCount) => {
-	const likes = (likesCount += 1);
+const incrementLikes = (e, mediaItem, mediaCardDOM) => {
+	const newLikesCount = (mediaItem.likes += 1);
+	totalLikesCount = totalLikesCount += 1;
+	mediaCardDOM.querySelector('.likes-count').textContent = newLikesCount;
+	document.querySelector('.total-likes').textContent = totalLikesCount;
 
-	return likes;
+	e.target.closest('svg').classList.remove('likes-button');
 };
 
 const calculateTotalCountOfLikes = (media) => {
@@ -224,26 +218,28 @@ const sortMediasEvent = (media, photographerName) => {
 };
 
 export const openMediaModal = (e, media, photographerName) => {
-	clickedMedia = e.target;
+	if (e.target.classList.contains('media')) {
+		clickedMedia = e.target;
 
-	e.preventDefault();
+		e.preventDefault();
 
-	mediaModal.style.display = 'flex';
-	document.body.style.overflow = 'hidden';
+		mediaModal.style.display = 'flex';
+		document.body.style.overflow = 'hidden';
 
-	const displayedMedia = media.find((med) => med.id === Number(e.target.id));
-	index = media.indexOf(displayedMedia);
+		const displayedMedia = media.find((med) => med.id === Number(e.target.id));
+		index = media.indexOf(displayedMedia);
 
-	displaySelectedMediaInModal(
-		displayedMedia,
-		photographerName,
-		true,
-		prevButton
-	);
+		displaySelectedMediaInModal(
+			displayedMedia,
+			photographerName,
+			true,
+			prevButton
+		);
 
-	nextButton.focus();
+		nextButton.focus();
 
-	focusTrap(document.querySelector('.media-modal'), null, null);
+		focusTrap(document.querySelector('.media-modal'), null, null);
+	}
 };
 
 const scrollMedia = (currentIndex, media, photographerName, direction) => {
