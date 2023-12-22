@@ -170,10 +170,7 @@ const toggleFiltersList = () => {
 		filter.classList.toggle('no-clickable')
 	);
 
-	focusTrap(
-		toggleFiltersListButton,
-		activeFiltersOptions[activeFiltersOptions.length - 1]
-	);
+	focusTrap(document.querySelector('.sort-filters'), null, null);
 };
 
 const sortMedias = (media, photographerName, filter) => {
@@ -195,10 +192,7 @@ const sortMedias = (media, photographerName, filter) => {
 		}
 		mediaContainer.innerHTML = '';
 		displayMedias(sortedMedia, photographerName);
-		cancelFocusTrap(
-			toggleFiltersListButton,
-			activeFiltersOptions[activeFiltersOptions.length - 1]
-		);
+		cancelFocusTrap(document.querySelector('.sort-filters'), null, null);
 		toggleFiltersList();
 	}
 };
@@ -249,7 +243,7 @@ export const openMediaModal = (e, media, photographerName) => {
 
 	nextButton.focus();
 
-	focusTrap(closeButton, nextButton);
+	focusTrap(document.querySelector('.media-modal'), null, null);
 };
 
 const scrollMedia = (currentIndex, media, photographerName, direction) => {
@@ -271,7 +265,7 @@ const closeMediaModal = () => {
 	mediaModal.style.display = 'none';
 	document.body.style.overflow = 'visible';
 
-	cancelFocusTrap(closeButton, nextButton);
+	cancelFocusTrap(document.querySelector('.media-modal'), null, null);
 
 	if (clickedMedia) {
 		setTimeout(() => {

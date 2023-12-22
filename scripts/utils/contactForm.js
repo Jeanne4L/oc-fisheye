@@ -14,7 +14,11 @@ const contactForm = () => {
 
 		inputs[0].focus();
 
-		focusTrap(closeModalButton, sendButton);
+		focusTrap(
+			document.querySelector('.contact-modal'),
+			closeModalButton,
+			sendButton
+		);
 	};
 
 	const closeModal = () => {
@@ -24,7 +28,11 @@ const contactForm = () => {
 
 		contactForm.reset();
 
-		cancelFocusTrap(closeModalButton, sendButton);
+		cancelFocusTrap(
+			document.querySelector('.contact-modal'),
+			closeModalButton,
+			sendButton
+		);
 
 		setTimeout(() => {
 			displayModalButton.focus();
