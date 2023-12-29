@@ -1,9 +1,12 @@
-import { mediaTemplate } from '../templates/media.js';
+import { createMedia, mediaTemplate } from '../templates/media.js';
 import contactForm from '../utils/contactForm.js';
 import { focusTrap, cancelFocusTrap } from '../helpers/focusTrap.js';
 import heartIcon from '../components/heartIcon.js';
 
-const toggleFiltersListButton = document.querySelector('#sort-button');
+const toggleFiltersButton = document.querySelector('#sort-button');
+const sortFiltersListContainer = document.querySelector(
+	'#sort-filters-container'
+);
 const sortFiltersList = document.querySelector('#sort-filters');
 const activeFiltersOptions = document.querySelectorAll('.sort-filters-option');
 const mediaContainer = document.querySelector('#medias');
@@ -33,11 +36,11 @@ const getPhotographer = async () => {
 	}
 };
 
-const displayMedias = (media, photographerName) => {
+const displayMedias = (media) => {
 	totalLikesCount = calculateTotalCountOfLikes(media);
 
 	media.forEach((mediaItem) => {
-		const mediaModel = mediaTemplate(mediaItem, photographerName, false);
+		const mediaModel = mediaTemplate(mediaItem, false);
 		const mediaCardDOM = mediaModel.getMediaCardDOM();
 		mediaContainer.appendChild(mediaCardDOM);
 
@@ -48,11 +51,11 @@ const displayMedias = (media, photographerName) => {
 			) {
 				incrementLikes(e, mediaItem, mediaCardDOM);
 			}
-			openMediaModal(e, media, photographerName);
+			openMediaModal(e, media);
 		});
 		mediaCardDOM.addEventListener('keydown', (e) => {
 			if (e.key == 'Enter') {
-				openMediaModal(e, media, photographerName);
+				openMediaModal(e, media);
 			}
 			if (e.target.classList.contains('likes-button') && e.key == 'Enter') {
 				incrementLikes(e, mediaItem, mediaCardDOM);
@@ -63,15 +66,10 @@ const displayMedias = (media, photographerName) => {
 
 const displaySelectedMediaInModal = (
 	mediaToDisplay,
-	photographerName,
 	isDisplayedInModal,
 	eltToInsertBefore
 ) => {
-	const mediaModel = mediaTemplate(
-		mediaToDisplay,
-		photographerName,
-		isDisplayedInModal
-	);
+	const mediaModel = mediaTemplate(mediaToDisplay, isDisplayedInModal);
 	const mediaCardDOM = mediaModel.getMediaCardDOM();
 
 	if (currentMedia) {
@@ -152,14 +150,22 @@ const displayInfoBox = (price) => {
 };
 
 const toggleFiltersList = () => {
-	toggleFiltersListButton.classList.toggle('returned-button');
-	if (toggleFiltersListButton.getAttribute('aria-expanded') == 'false') {
-		toggleFiltersListButton.setAttribute('aria-expanded', 'true');
+	toggleFiltersButton.classList.toggle('returned-button');
+	if (toggleFiltersButton.getAttribute('aria-expanded') == 'false') {
+		toggleFiltersButton.setAttribute('aria-expanded', 'true');
 	} else {
-		toggleFiltersListButton.setAttribute('aria-expanded', 'false');
+		toggleFiltersButton.setAttribute('aria-expanded', 'false');
 	}
 
-	sortFiltersList.classList.toggle('displayed-list');
+	if (sortFiltersListContainer.classList.contains('displayed-list')) {
+		sortFiltersListContainer.classList.remove('displayed-list');
+	} else {
+		sortFiltersList.style.transform = 'translateY(0)';
+
+		setTimeout(() => {
+			sortFiltersListContainer.classList.add('displayed-list');
+		}, 100);
+	}
 	activeFiltersOptions.forEach((filter) =>
 		filter.classList.toggle('no-clickable')
 	);
@@ -167,31 +173,40 @@ const toggleFiltersList = () => {
 	focusTrap(document.querySelector('.sort-filters'), null, null);
 };
 
-const sortMedias = (media, photographerName, filter) => {
+const sortMedias = (media, filter) => {
 	let sortedMedia;
 
 	if (filter.tagName === 'LI') {
 		if (filter.id === 'sort-popularity') {
 			sortedMedia = media.sort((a, b) => b.likes - a.likes);
+			setTimeout(() => {
+				sortFiltersList.style.transform = 'translateY(0)';
+			}, 90);
 		} else if (filter.id === 'sort-date') {
 			sortedMedia = media.sort((a, b) => {
 				const dateA = new Date(a.date);
 				const dateB = new Date(b.date);
 				return dateA - dateB;
 			});
+			setTimeout(() => {
+				sortFiltersList.style.transform = 'translateY(-54.2px)';
+			}, 90);
 		} else if (filter.id === 'sort-title') {
 			sortedMedia = media.sort((a, b) =>
 				a.title.localeCompare(b.title, 'en', { ignorePunctuation: true })
 			);
+			setTimeout(() => {
+				sortFiltersList.style.transform = 'translateY(-109px)';
+			}, 90);
 		}
 		mediaContainer.innerHTML = '';
-		displayMedias(sortedMedia, photographerName);
+		displayMedias(sortedMedia);
 		cancelFocusTrap(document.querySelector('.sort-filters'), null, null);
 		toggleFiltersList();
 	}
 };
 
-const sortMediasEvent = (media, photographerName) => {
+const sortMediasEvent = (media) => {
 	activeFiltersOptions.forEach((activeFiltersOption) => {
 		activeFiltersOption.addEventListener('focus', (e) => {
 			const selectedFilter = e.target;
@@ -206,18 +221,18 @@ const sortMediasEvent = (media, photographerName) => {
 
 	sortFiltersList.addEventListener('click', (e) => {
 		const filter = e.target;
-		sortMedias(media, photographerName, filter);
+		sortMedias(media, filter);
 	});
 
 	sortFiltersList.addEventListener('keydown', (e) => {
 		if (e.key == 'Enter') {
 			const filter = e.target;
-			sortMedias(media, photographerName, filter);
+			sortMedias(media, filter);
 		}
 	});
 };
 
-export const openMediaModal = (e, media, photographerName) => {
+export const openMediaModal = (e, media) => {
 	if (e.target.classList.contains('media')) {
 		clickedMedia = e.target;
 
@@ -229,12 +244,7 @@ export const openMediaModal = (e, media, photographerName) => {
 		const displayedMedia = media.find((med) => med.id === Number(e.target.id));
 		index = media.indexOf(displayedMedia);
 
-		displaySelectedMediaInModal(
-			displayedMedia,
-			photographerName,
-			true,
-			prevButton
-		);
+		displaySelectedMediaInModal(displayedMedia, true, prevButton);
 
 		nextButton.focus();
 
@@ -242,19 +252,14 @@ export const openMediaModal = (e, media, photographerName) => {
 	}
 };
 
-const scrollMedia = (currentIndex, media, photographerName, direction) => {
+const scrollMedia = (currentIndex, media, direction) => {
 	currentIndex = (currentIndex + direction + media.length) % media.length;
 
 	const mediaToDisplay = media[currentIndex];
 
 	index = currentIndex;
 
-	displaySelectedMediaInModal(
-		mediaToDisplay,
-		photographerName,
-		true,
-		prevButton
-	);
+	displaySelectedMediaInModal(mediaToDisplay, true, prevButton);
 };
 
 const closeMediaModal = () => {
@@ -288,24 +293,20 @@ const displayPhotographerData = async (photographer, media) => {
 
 	contactForm();
 
-	if (toggleFiltersListButton.getAttribute('aria-expanded') == 'false') {
+	if (toggleFiltersButton.getAttribute('aria-expanded') == 'false') {
 		activeFiltersOptions.forEach((filter) =>
 			filter.classList.add('no-clickable')
 		);
 	}
-	toggleFiltersListButton.addEventListener('click', () => {
-		// activeFiltersOptions.forEach((filter) => {
-		// 	filter.classList.toggle('no-clickable');
-		// });
-
+	toggleFiltersButton.addEventListener('click', () => {
 		toggleFiltersList();
 	});
 
-	toggleFiltersListButton.addEventListener('keydown', (e) => {
+	toggleFiltersButton.addEventListener('keydown', (e) => {
 		if (e.key == 'Enter') {
 			toggleFiltersList();
 		}
-		if (toggleFiltersListButton.getAttribute('aria-expanded') == 'false') {
+		if (toggleFiltersButton.getAttribute('aria-expanded') == 'false') {
 			activeFiltersOptions.forEach((filter) =>
 				filter.setAttribute('tabindex', '-1')
 			);
@@ -316,9 +317,9 @@ const displayPhotographerData = async (photographer, media) => {
 		}
 	});
 
-	sortMediasEvent(media, name);
+	sortMediasEvent(media);
 
-	displayMedias(media, name);
+	displayMedias(media);
 
 	// display info box with likes and price
 	const main = document.querySelector('main');
@@ -329,20 +330,16 @@ const displayPhotographerData = async (photographer, media) => {
 	modalTitle.innerHTML += '<br>' + name;
 
 	// Change media in modal
-	prevButton.addEventListener('click', () =>
-		scrollMedia(index, media, name, -1)
-	);
+	prevButton.addEventListener('click', () => scrollMedia(index, media, -1));
 	prevButton.addEventListener('keydown', (e) => {
 		if (e.key == 'Enter') {
-			scrollMedia(index, media, name, -1);
+			scrollMedia(index, media, -1);
 		}
 	});
-	nextButton.addEventListener('click', () =>
-		scrollMedia(index, media, name, 1)
-	);
+	nextButton.addEventListener('click', () => scrollMedia(index, media, 1));
 	nextButton.addEventListener('keydown', (e) => {
 		if (e.key == 'Enter') {
-			scrollMedia(index, media, name, 1);
+			scrollMedia(index, media, 1);
 		}
 	});
 
@@ -362,6 +359,11 @@ const init = async () => {
 	);
 
 	const photographerMedia = media.filter((m) => m.photographerId === id);
-	displayPhotographerData(photographerData, photographerMedia);
+
+	const formattedMedia = photographerMedia.map((media) =>
+		createMedia(media, photographerData.name)
+	);
+
+	displayPhotographerData(photographerData, formattedMedia);
 };
 init();

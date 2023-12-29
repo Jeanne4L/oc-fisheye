@@ -27,12 +27,7 @@
 			<!-- MEDIAS -->
 			<div class="sort-form">
 				<span class="sort-label" id="buttonLabel">Trier par</span>
-				<ul
-					id="sort-filters"
-					class="sort-filters"
-					role="listbox"
-					aria-activedescendant="sort-popularity"
-				>
+				<div id="sort-filters-container" class="sort-filters-container">
 					<svg
 						tabindex="0"
 						role="button"
@@ -54,31 +49,38 @@
 							fill="#fff"
 						/>
 					</svg>
-					<li
-						class="sort-filters-option"
-						id="sort-popularity"
-						tabindex="0"
-						role="option"
+					<ul
+						id="sort-filters"
+						class="sort-filters"
+						role="listbox"
+						aria-activedescendant="sort-popularity"
 					>
-						Popularité
-					</li>
-					<li
-						class="sort-filters-option"
-						id="sort-date"
-						tabindex="0"
-						role="option"
-					>
-						Date
-					</li>
-					<li
-						class="sort-filters-option"
-						id="sort-title"
-						tabindex="0"
-						role="option"
-					>
-						Titre
-					</li>
-				</ul>
+						<li
+							class="sort-filters-option"
+							id="sort-popularity"
+							tabindex="0"
+							role="option"
+						>
+							Popularité
+						</li>
+						<li
+							class="sort-filters-option"
+							id="sort-date"
+							tabindex="0"
+							role="option"
+						>
+							Date
+						</li>
+						<li
+							class="sort-filters-option"
+							id="sort-title"
+							tabindex="0"
+							role="option"
+						>
+							Titre
+						</li>
+					</ul>
+				</div>
 			</div>
 			<div id="medias"></div>
 		</main>
