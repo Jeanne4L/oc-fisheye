@@ -95,10 +95,17 @@ h2 {
 	width: 100%;
 }
 
-.modal-header img {
-	cursor: pointer;
-	width: 25px;
+.contact-modal .close-button {
     margin-left: 20px;
+}
+
+.image-button {
+    border: none;
+    background: none;
+}
+
+.modal-header img {
+	width: 25px;
 }
 
 .modal-header h2 {
@@ -285,12 +292,17 @@ h2 {
 	align-items: center;
 }
 
-.media-description svg {
+.likes-icon {
 	width: 20px;
 	height: 20px;
 	fill: var(--primary-color);
 	margin-left: 5px;
+    cursor: pointer;
 	transition: transform 300ms ease;
+}
+
+.likes-button:hover {
+    transform: scale(0.9)
 }
 
 .info-box {

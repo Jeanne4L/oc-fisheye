@@ -22,7 +22,7 @@ export const mediaTemplate = (media, isDisplayedInModal) => {
     const likesIcon = heartIconComponent('#901c1c');
     likesIcon.setAttribute('tabindex', '0');
     likesIcon.setAttribute('role', 'button');
-    likesIcon.classList.add('likes-button');
+    likesIcon.classList.add('likes-button', 'likes-icon');
 
     const domElt = media.getDomElt();
 

@@ -85,6 +85,7 @@
 			</div>
 			<div id="medias"></div>
 		</main>
+
 		<div id="contact-modal-overlay" aria-hidden="true">
 			<div
 				class="modal contact-modal"
@@ -93,27 +94,24 @@
 			>
 				<div class="modal-header">
 					<h2 id="modal-title">Contactez-moi</h2>
-					<img
-						src="assets/icons/close.svg"
-						id="contact-close-button"
-						class="close-button"
-						tabindex="0"
-						role="button"
-						aria-label="fermer la modale"
-					/>
+                    <button id="contact-close-button" class="close-button image-button" aria-label="fermer la modale">
+                        <img
+                            src="assets/icons/close.svg"
+                        />
+                    </button>
 				</div>
 				<form id="contact-form">
 					<label for="first">Prénom</label>
-					<input type="text" id="first" />
+					<input type="text" id="first" required/>
 
 					<label for="last">Nom</label>
-					<input type="text" id="last" />
+					<input type="text" id="last" required/>
 
 					<label for="email">Email</label>
-					<input type="email" id="email" />
+					<input type="email" id="email" required/>
 
 					<label for="message">Message</label>
-					<textarea name="message" id="message"></textarea>
+					<textarea name="message" id="message" required></textarea>
 
 					<button
 						class="contact-button"
@@ -132,55 +130,51 @@
 				role="dialog"
 				aria-label="modale d'affichage des médias'"
 			>
-				<svg
-					tabindex="0"
-					role="button"
-					aria-label="fermer la modale"
-					id="media-close-button"
-					class="close-button"
-					width="20px"
-					height="20px"
-					viewBox="0 0 42 42"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						d="M42 4.23L37.77 0L21 16.77L4.23 0L0 4.23L16.77 21L0 37.77L4.23 42L21 25.23L37.77 42L42 37.77L25.23 21L42 4.23Z"
-						fill="#901c1c"
-					/>
-				</svg>
-				<svg
-					tabindex="0"
-					role="button"
-					aria-label="voir le média précédent"
-					id="media-prev-button"
-					fill="#000000"
-					width="30px"
-					height="30px"
-					viewBox="0 0 24 24"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<polygon
-						points="15.3 23.9 3.4 12 15.3 0.1 18.2 2.9 9.1 12 18.2 21.1 15.3 23.9"
-						fill="#901c1c"
-					/>
-				</svg>
-				<svg
-					tabindex="0"
-					role="button"
-					aria-label="voir le média suivant"
-					id="media-next-button"
-					fill="#000000"
-					width="30px"
-					height="30px"
-					viewBox="0 0 24 24"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<polygon
-						points="7.7 23.9 4.8 21.1 13.9 12 4.8 2.9 7.7 0.1 19.6 12 7.7 23.9"
-						fill="#901c1c"
-					/>
-				</svg>
+                <button aria-label="fermer la modale" id="media-close-button" class="close-button image-button">
+                    <svg
+                        width="20px"
+                        height="20px"
+                        viewBox="0 0 42 42"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M42 4.23L37.77 0L21 16.77L4.23 0L0 4.23L16.77 21L0 37.77L4.23 42L21 25.23L37.77 42L42 37.77L25.23 21L42 4.23Z"
+                            fill="#901c1c"
+                        />
+                    </svg>
+                </button>
+
+                <button aria-label="voir le média précédent" id="media-prev-button" class="image-button">
+                    <svg
+                        fill="#000000"
+                        width="30px"
+                        height="30px"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <polygon
+                            points="15.3 23.9 3.4 12 15.3 0.1 18.2 2.9 9.1 12 18.2 21.1 15.3 23.9"
+                            fill="#901c1c"
+                        />
+                    </svg>
+                </button>
+
+                <button aria-label="voir le média suivant" id="media-next-button" class="image-button">
+                    <svg
+                        fill="#000000"
+                        width="30px"
+                        height="30px"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <polygon
+                            points="7.7 23.9 4.8 21.1 13.9 12 4.8 2.9 7.7 0.1 19.6 12 7.7 23.9"
+                            fill="#901c1c"
+                        />
+                    </svg> 
+                </button>
+
 			</div>
 		</div>
 		<script type="module" src="scripts/pages/photographer.js"></script>
