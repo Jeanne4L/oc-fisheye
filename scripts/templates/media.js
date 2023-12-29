@@ -24,7 +24,7 @@ export const mediaTemplate = (media, isDisplayedInModal) => {
     likesIcon.setAttribute('role', 'button');
     likesIcon.classList.add('likes-button');
 
-    const { domElt } = media;
+    const domElt = media.getDomElt();
 
     if (!isDisplayedInModal) {
       domElt.setAttribute('tabindex', '0');
@@ -81,18 +81,18 @@ const createVideoElt = (media, photographerName) => {
 };
 
 export const createMedia = (media, photographerName) => {
-  let domElt;
+  let getDomElt;
 
   if (!media.image && !media.video) {
     throw new Error('Unknown media type');
   }
   if (media.image) {
-    domElt = createImageElt(media, photographerName);
+    getDomElt = () => createImageElt(media, photographerName);
   }
 
   if (media.video) {
-    domElt = createVideoElt(media, photographerName);
+    getDomElt = () => createVideoElt(media, photographerName);
   }
 
-  return { ...media, domElt };
+  return { ...media, getDomElt };
 };
