@@ -1,5 +1,5 @@
-let firstEltHandler; let
-  lastEltHandler;
+let firstEltHandler; 
+let lastEltHandler;
 
 export const focusTrap = (elt, firstElt, lastElt) => {
   const { children } = elt;
@@ -7,7 +7,7 @@ export const focusTrap = (elt, firstElt, lastElt) => {
   let firstEltToFocus = firstElt;
   let lastEltToFocus = lastElt;
 
-  if (firstEltToFocus === null && lastElt === null) {
+  if (!firstEltToFocus && !lastEltToFocus) {
     [firstEltToFocus, lastEltToFocus] = [children[0], children[children.length - 1]];
   }
 

@@ -30,7 +30,7 @@ const getPhotographer = async () => {
       throw new Error(`Network response was not ok: ${response.statusText}`);
     }
 
-    return await response.json();
+    return response.json();
   } catch (error) {
     return error;
   }
@@ -89,7 +89,7 @@ const openMediaModal = (e, media) => {
 
     closeButton.focus();
 
-    focusTrap(document.querySelector('.media-modal'), null, null);
+    focusTrap(document.querySelector('.media-modal'));
   }
 };
 
@@ -108,7 +108,7 @@ const closeMediaModal = () => {
   document.body.style.overflow = 'visible';
   mediaModal.setAttribute('aria-hidden', 'true');
 
-  cancelFocusTrap(document.querySelector('.media-modal'), null, null);
+  cancelFocusTrap(document.querySelector('.media-modal'));
 
   if (clickedMedia) {
     setTimeout(() => {
@@ -215,7 +215,7 @@ const toggleFiltersList = () => {
   }
   activeFiltersOptions.forEach((filter) => filter.classList.toggle('no-clickable'));
 
-  focusTrap(document.querySelector('.sort-filters'), null, null);
+  focusTrap(document.querySelector('.sort-filters'));
 };
 
 const sortMedias = (media, filter) => {
@@ -244,7 +244,7 @@ const sortMedias = (media, filter) => {
     }
     mediaContainer.innerHTML = '';
     displayMedias(sortedMedia);
-    cancelFocusTrap(document.querySelector('.sort-filters'), null, null);
+    cancelFocusTrap(document.querySelector('.sort-filters'));
     toggleFiltersList();
   }
 };
