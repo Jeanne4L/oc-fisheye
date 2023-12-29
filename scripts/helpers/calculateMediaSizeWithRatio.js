@@ -1,28 +1,27 @@
-export const calculateMediaSizeWithRatio = (
-	eltToResize,
-	maxSizeInPercentage
+const calculateMediaSizeWithRatio = (
+  eltToResize,
+  maxSizeInPercentage,
 ) => {
-	let width = eltToResize.width;
-	let height = eltToResize.height;
+  let { width, height } = eltToResize;
 
-	let screenWidth = window.innerWidth;
-	let screenHeight = window.innerHeight;
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
 
-	let mediaRatio = width / height;
+  const mediaRatio = width / height;
 
-	let maxSize =
-		Math.min(screenWidth, screenHeight) * (maxSizeInPercentage / 100);
+  const maxSize = Math.min(screenWidth, screenHeight) * (maxSizeInPercentage / 100);
 
-	if (width > height) {
-		width = maxSize;
-		height = maxSize / mediaRatio;
-	} else {
-		height = maxSize;
-		width = maxSize * mediaRatio;
-	}
+  if (width > height) {
+    width = maxSize;
+    height = maxSize / mediaRatio;
+  } else {
+    height = maxSize;
+    width = maxSize * mediaRatio;
+  }
 
-	eltToResize.style.width = width + 'px';
-	eltToResize.style.height = height + 'px';
+  eltToResize.style.width = `${width}px`;
+  eltToResize.style.height = `${height}px`;
 
-	return eltToResize;
+  return eltToResize;
 };
+export default calculateMediaSizeWithRatio;
