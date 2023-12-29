@@ -246,7 +246,7 @@ export const openMediaModal = (e, media) => {
 
 		displaySelectedMediaInModal(displayedMedia, true, prevButton);
 
-		nextButton.focus();
+		closeButton.focus();
 
 		focusTrap(document.querySelector('.media-modal'), null, null);
 	}
@@ -336,9 +336,19 @@ const displayPhotographerData = async (photographer, media) => {
 			scrollMedia(index, media, -1);
 		}
 	});
+	mediaModal.addEventListener('keydown', (e) => {
+		if (e.key == 'ArrowLeft') {
+			scrollMedia(index, media, -1);
+		}
+	});
 	nextButton.addEventListener('click', () => scrollMedia(index, media, 1));
 	nextButton.addEventListener('keydown', (e) => {
 		if (e.key == 'Enter') {
+			scrollMedia(index, media, 1);
+		}
+	});
+	mediaModal.addEventListener('keydown', (e) => {
+		if (e.key == 'ArrowRight') {
 			scrollMedia(index, media, 1);
 		}
 	});
