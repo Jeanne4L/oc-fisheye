@@ -7,27 +7,7 @@ const toggleFiltersButton = document.querySelector('#sort-button');
 const sortFiltersListContainer = document.querySelector(
   '#sort-filters-container',
 );
-const sortFiltersArray = [
-  {
-    id: 'popularity',
-    tabindex: '0',
-    role: 'option',
-    value: 'Popularité',
-  },
-  {
-    id: 'date',
-    tabindex: '0',
-    role: 'option',
-    value: 'Date',
-  },
-  {
-    id: 'title',
-    tabindex: '0',
-    role: 'option',
-    value: 'Titre',
-  },
-];
-console.log(sortFiltersArray.sort((a, b) => a.id.localeCompare(b.id)))
+let sortFiltersArray = ['popularity', 'date', 'title'];
 const sortFiltersList = document.querySelector('#sort-filters');
 const activeFiltersOptions = document.querySelectorAll('.sort-filters-option');
 const mediaContainer = document.querySelector('#medias');
@@ -217,13 +197,22 @@ const displayInfoBox = (price) => {
 };
 
 const displayFilters = (filtersList) => {
+  sortFiltersList.innerHTML = '';
   filtersList.forEach((filterItem) => {
     const li = document.createElement('li');
     li.classList.add('sort-filters-option');
-    li.id = `sort-${filterItem.id}`;
-    li.tabindex = filterItem.tabindex;
-    li.role = filterItem.role;
-    li.textContent = filterItem.value;
+    li.id = `sort-${filterItem}`;
+    li.tabindex = '0';
+    li.role = 'option';
+    let filterItemValue;
+    if (filterItem === 'popularity') {
+      filterItemValue = 'Popularité';
+    } else if (filterItem === 'date') {
+      filterItemValue = 'Date';
+    } else if (filterItem === 'title') {
+      filterItemValue = 'Titre';
+    }
+    li.textContent = filterItemValue;
     sortFiltersList.appendChild(li);
   });
 };
@@ -254,31 +243,32 @@ const toggleFiltersList = () => {
 };
 
 const sortMedias = (media, filter) => {
-  let sortedMedia;
+  let sortFunction;
 
   if (filter.tagName === 'LI') {
-    let order = [];
+    const filterId = filter.id;
 
-    if (filter.id === 'sort-popularity') {
-      sortedMedia = media.sort((a, b) => b.likes - a.likes);
-      order = ['popularity', 'date', 'title'];
-    } else if (filter.id === 'sort-date') {
-      sortedMedia = media.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return dateA - dateB;
-      });
-      order = ['date', 'title', 'popularity'];
-    } else if (filter.id === 'sort-title') {
-      sortedMedia = media.sort((a, b) => a.title.localeCompare(b.title, 'en', { ignorePunctuation: true }));
-      order = ['title', 'popularity', 'date'];
+    switch (filterId) {
+      case 'sort-popularity':
+        sortFunction = (a, b) => b.likes - a.likes;
+        sortFiltersArray = ['popularity', 'date', 'title'];
+        break;
+      case 'sort-date':
+        sortFunction = (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime();
+        sortFiltersArray = ['date', 'title', 'popularity'];
+        break;
+      case 'sort-title':
+        sortFunction = (a, b) => a.title.localeCompare(b.title, 'en', { ignorePunctuation: true });
+        sortFiltersArray = ['title', 'popularity', 'date'];
+        break;
+      default:
     }
+
     mediaContainer.innerHTML = '';
-    displayMedias(sortedMedia);
+    displayMedias(media.sort(sortFunction));
+    displayFilters(sortFiltersArray);
     cancelFocusTrap(document.querySelector('.sort-filters'));
     toggleFiltersList();
-    console.log(Object.entries(sortFiltersArray))
-    sortFiltersArray.forEach((key) => console.log(sortFiltersArray[key]))
   }
 };
 
