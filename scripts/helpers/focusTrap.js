@@ -2,7 +2,7 @@ let firstEltHandler;
 let lastEltHandler;
 
 export const focusTrap = (elt) => {
-  const focusableElts = elt.querySelectorAll('a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, li');
+  const focusableElts = elt.querySelectorAll('button, textarea, input[type="text"], select, li');
 
   const firstEltToFocus = focusableElts[0];
   const lastEltToFocus = focusableElts[focusableElts.length - 1];
@@ -25,7 +25,10 @@ export const focusTrap = (elt) => {
   lastEltToFocus.addEventListener('keydown', lastEltHandler);
 };
 
-export const cancelFocusTrap = (elt) => {const focusableElts = elt.querySelectorAll('a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, li');const firstEltToFocus = focusableElts[0];const lastEltToFocus = focusableElts[focusableElts.length - 1];
+export const cancelFocusTrap = (elt) => {
+  const focusableElts = elt.querySelectorAll('button, textarea, input[type="text"], select, li');
+  const firstEltToFocus = focusableElts[0];
+  const lastEltToFocus = focusableElts[focusableElts.length - 1];
 
   firstEltToFocus.removeEventListener('keydown', firstEltHandler);
   lastEltToFocus.removeEventListener('keydown', lastEltHandler);
