@@ -7,6 +7,27 @@ const toggleFiltersButton = document.querySelector('#sort-button');
 const sortFiltersListContainer = document.querySelector(
   '#sort-filters-container',
 );
+const sortFiltersArray = [
+  {
+    id: 'popularity',
+    tabindex: '0',
+    role: 'option',
+    value: 'Popularité',
+  },
+  {
+    id: 'date',
+    tabindex: '0',
+    role: 'option',
+    value: 'Date',
+  },
+  {
+    id: 'title',
+    tabindex: '0',
+    role: 'option',
+    value: 'Titre',
+  },
+];
+console.log(sortFiltersArray.sort((a, b) => a.id.localeCompare(b.id)))
 const sortFiltersList = document.querySelector('#sort-filters');
 const activeFiltersOptions = document.querySelectorAll('.sort-filters-option');
 const mediaContainer = document.querySelector('#medias');
@@ -51,6 +72,8 @@ const incrementLikes = (e, mediaItem, mediaCardDOM) => {
   document.querySelector('.total-likes').textContent = totalLikesCount;
 
   e.target.closest('svg').classList.remove('likes-button');
+  e.target.closest('svg').style.opacity = '0.5';
+  e.target.closest('svg').style.pointerEvents = 'none';
 };
 
 const displaySelectedMediaInModal = (
@@ -193,6 +216,18 @@ const displayInfoBox = (price) => {
   return infoBox;
 };
 
+const displayFilters = (filtersList) => {
+  filtersList.forEach((filterItem) => {
+    const li = document.createElement('li');
+    li.classList.add('sort-filters-option');
+    li.id = `sort-${filterItem.id}`;
+    li.tabindex = filterItem.tabindex;
+    li.role = filterItem.role;
+    li.textContent = filterItem.value;
+    sortFiltersList.appendChild(li);
+  });
+};
+
 const toggleFiltersList = () => {
   toggleFiltersButton.classList.toggle('returned-button');
   if (toggleFiltersButton.getAttribute('aria-expanded') === 'false') {
@@ -215,37 +250,35 @@ const toggleFiltersList = () => {
   }
   activeFiltersOptions.forEach((filter) => filter.classList.toggle('no-clickable'));
 
-  focusTrap(document.querySelector('.sort-filters'));
+  focusTrap(document.querySelector('.sort-filters-container'));
 };
 
 const sortMedias = (media, filter) => {
   let sortedMedia;
 
   if (filter.tagName === 'LI') {
+    let order = [];
+
     if (filter.id === 'sort-popularity') {
       sortedMedia = media.sort((a, b) => b.likes - a.likes);
-      setTimeout(() => {
-        sortFiltersList.style.transform = 'translateY(0)';
-      }, 90);
+      order = ['popularity', 'date', 'title'];
     } else if (filter.id === 'sort-date') {
       sortedMedia = media.sort((a, b) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
         return dateA - dateB;
       });
-      setTimeout(() => {
-        sortFiltersList.style.transform = 'translateY(-54.2px)';
-      }, 90);
+      order = ['date', 'title', 'popularity'];
     } else if (filter.id === 'sort-title') {
       sortedMedia = media.sort((a, b) => a.title.localeCompare(b.title, 'en', { ignorePunctuation: true }));
-      setTimeout(() => {
-        sortFiltersList.style.transform = 'translateY(-109px)';
-      }, 90);
+      order = ['title', 'popularity', 'date'];
     }
     mediaContainer.innerHTML = '';
     displayMedias(sortedMedia);
     cancelFocusTrap(document.querySelector('.sort-filters'));
     toggleFiltersList();
+    console.log(Object.entries(sortFiltersArray))
+    sortFiltersArray.forEach((key) => console.log(sortFiltersArray[key]))
   }
 };
 
@@ -295,28 +328,25 @@ const displayPhotographerData = async (photographer, media) => {
 
   contactFormModal();
 
+  // display filters
+  displayFilters(sortFiltersArray);
+
   if (toggleFiltersButton.getAttribute('aria-expanded') === 'false') {
     activeFiltersOptions.forEach((filter) => filter.classList.add('no-clickable'));
   }
+
   toggleFiltersButton.addEventListener('click', () => {
     toggleFiltersList();
   });
 
   toggleFiltersButton.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       toggleFiltersList();
-    }
-    if (toggleFiltersButton.getAttribute('aria-expanded') === 'false') {
-      activeFiltersOptions.forEach((filter) => filter.setAttribute('tabindex', '-1'));
-    } else {
-      activeFiltersOptions.forEach((filter) => {
-        filter.setAttribute('tabindex', '0');
-      });
     }
   });
 
   sortMediasEvent(media);
-
   displayMedias(media);
 
   // display info box with likes and price

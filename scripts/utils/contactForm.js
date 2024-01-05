@@ -15,11 +15,7 @@ const contactFormModal = () => {
 
     inputs[0].focus();
 
-    focusTrap(
-      document.querySelector('.contact-modal'),
-      closeModalButton,
-      sendButton,
-    );
+    focusTrap(document.querySelector('.contact-modal'));
   };
 
   const closeModal = () => {

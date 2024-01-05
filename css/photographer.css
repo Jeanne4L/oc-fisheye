@@ -99,7 +99,7 @@ h2 {
     margin-left: 20px;
 }
 
-.image-button {
+.image-button, .sort-button {
     border: none;
     background: none;
 }

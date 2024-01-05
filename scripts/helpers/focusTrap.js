@@ -1,15 +1,11 @@
-let firstEltHandler; 
+let firstEltHandler;
 let lastEltHandler;
 
-export const focusTrap = (elt, firstElt, lastElt) => {
-  const { children } = elt;
+export const focusTrap = (elt) => {
+  const focusableElts = elt.querySelectorAll('a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, li');
 
-  let firstEltToFocus = firstElt;
-  let lastEltToFocus = lastElt;
-
-  if (!firstEltToFocus && !lastEltToFocus) {
-    [firstEltToFocus, lastEltToFocus] = [children[0], children[children.length - 1]];
-  }
+  const firstEltToFocus = focusableElts[0];
+  const lastEltToFocus = focusableElts[focusableElts.length - 1];
 
   firstEltHandler = (e) => {
     if (e.shiftKey && e.key === 'Tab') {
@@ -29,15 +25,7 @@ export const focusTrap = (elt, firstElt, lastElt) => {
   lastEltToFocus.addEventListener('keydown', lastEltHandler);
 };
 
-export const cancelFocusTrap = (elt, firstElt, lastElt) => {
-  const { children } = elt;
-
-  let firstEltToFocus = firstElt;
-  let lastEltToFocus = lastElt;
-
-  if (firstEltToFocus === null && lastElt === null) {
-    [firstEltToFocus, lastEltToFocus] = [children[0], children[children.length - 1]];
-  }
+export const cancelFocusTrap = (elt) => {const focusableElts = elt.querySelectorAll('a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, li');const firstEltToFocus = focusableElts[0];const lastEltToFocus = focusableElts[focusableElts.length - 1];
 
   firstEltToFocus.removeEventListener('keydown', firstEltHandler);
   lastEltToFocus.removeEventListener('keydown', lastEltHandler);

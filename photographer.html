@@ -28,59 +28,36 @@
 			<div class="sort-form">
 				<span class="sort-label" id="buttonLabel">Trier par</span>
 				<div id="sort-filters-container" class="sort-filters-container">
-					<svg
-						tabindex="0"
-						role="button"
-						aria-labelledby="buttonLabel"
-						aria-haspopup="listbox"
-						aria-expanded="false"
-						width="25px"
-						height="25px"
-						id="sort-button"
-						class="sort-button"
-						viewBox="0 0 24 24"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							fill-rule="evenodd"
-							clip-rule="evenodd"
-							d="M11.9999 13.9394L17.4696 8.46973L18.5303 9.53039L11.9999 16.0607L5.46961 9.53039L6.53027 8.46973L11.9999 13.9394Z"
-							fill="#fff"
-						/>
-					</svg>
+                    <button
+                        aria-labelledby="buttonLabel"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        id="sort-button"
+                        class="sort-button"
+                    >
+                        <svg
+                            width="25px"
+                            height="25px"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M11.9999 13.9394L17.4696 8.46973L18.5303 9.53039L11.9999 16.0607L5.46961 9.53039L6.53027 8.46973L11.9999 13.9394Z"
+                                fill="#fff"
+                            />
+                        </svg>
+                    </button>
+
 					<ul
 						id="sort-filters"
 						class="sort-filters"
 						role="listbox"
 						aria-activedescendant="sort-popularity"
 						aria-hidden="true"
-					>
-						<li
-							class="sort-filters-option"
-							id="sort-popularity"
-							tabindex="0"
-							role="option"
-						>
-							Popularité
-						</li>
-						<li
-							class="sort-filters-option"
-							id="sort-date"
-							tabindex="0"
-							role="option"
-						>
-							Date
-						</li>
-						<li
-							class="sort-filters-option"
-							id="sort-title"
-							tabindex="0"
-							role="option"
-						>
-							Titre
-						</li>
-					</ul>
+					></ul>
 				</div>
 			</div>
 			<div id="medias"></div>
