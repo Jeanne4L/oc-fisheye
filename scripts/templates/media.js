@@ -5,7 +5,7 @@ import heartIconComponent from '../components/heartIcon.js';
 export const mediaTemplate = (media, isDisplayedInModal) => {
   const { title, likes } = media;
 
-  const getMediaCardDOM = () => {
+  const getmediaElement = () => {
     const article = document.createElement('article');
 
     const mediaDescription = document.createElement('div');
@@ -24,20 +24,20 @@ export const mediaTemplate = (media, isDisplayedInModal) => {
     likesIcon.setAttribute('role', 'button');
     likesIcon.classList.add('likes-button', 'likes-icon');
 
-    const domElt = media.getDomElt();
+    const domElement = media.getDomElement();
 
     if (!isDisplayedInModal) {
-      domElt.setAttribute('tabindex', '0');
-      domElt.setAttribute('role', 'button');
+      domElement.setAttribute('tabindex', '0');
+      domElement.setAttribute('role', 'button');
     } else {
-      calculateMediaSizeWithRatio(domElt, 80);
+      calculateMediaSizeWithRatio(domElement, 80);
 
-      if (domElt.tagName === 'VIDEO') {
-        domElt.autoplay = true;
+      if (domElement.tagName === 'VIDEO') {
+        domElement.autoplay = true;
       }
     }
 
-    article.appendChild(domElt);
+    article.appendChild(domElement);
     article.appendChild(mediaDescription);
     mediaDescription.appendChild(mediaTitle);
 
@@ -51,10 +51,10 @@ export const mediaTemplate = (media, isDisplayedInModal) => {
 
     return article;
   };
-  return { media, getMediaCardDOM };
+  return { media, getmediaElement };
 };
 
-const createImageElt = (media, photographerName) => {
+const createImageElement = (media, photographerName) => {
   const img = document.createElement('img');
   img.src = `../../assets/photographers/${formatNameToFileName(
     photographerName,
@@ -66,7 +66,7 @@ const createImageElt = (media, photographerName) => {
   return img;
 };
 
-const createVideoElt = (media, photographerName) => {
+const createVideoElement = (media, photographerName) => {
   const video = document.createElement('video');
   video.src = `../../assets/photographers/${formatNameToFileName(
     photographerName,
@@ -81,18 +81,18 @@ const createVideoElt = (media, photographerName) => {
 };
 
 export const createMedia = (media, photographerName) => {
-  let getDomElt;
+  let getDomElement;
 
   if (!media.image && !media.video) {
     throw new Error('Unknown media type');
   }
   if (media.image) {
-    getDomElt = () => createImageElt(media, photographerName);
+    getDomElement = () => createImageElement(media, photographerName);
   }
 
   if (media.video) {
-    getDomElt = () => createVideoElt(media, photographerName);
+    getDomElement = () => createVideoElement(media, photographerName);
   }
 
-  return { ...media, getDomElt };
+  return { ...media, getDomElement };
 };

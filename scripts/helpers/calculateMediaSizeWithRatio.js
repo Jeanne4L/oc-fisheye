@@ -1,8 +1,8 @@
 const calculateMediaSizeWithRatio = (
-  eltToResize,
+  elementToResize,
   maxSizeInPercentage,
 ) => {
-  let { width, height } = eltToResize;
+  let { width, height } = elementToResize;
 
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
@@ -19,9 +19,9 @@ const calculateMediaSizeWithRatio = (
     width = maxSize * mediaRatio;
   }
 
-  eltToResize.style.width = `${width}px`;
-  eltToResize.style.height = `${height}px`;
+  elementToResize.style.width = `${width}px`;
+  elementToResize.style.height = `${height}px`;
 
-  return eltToResize;
+  return elementToResize;
 };
 export default calculateMediaSizeWithRatio;

@@ -1,35 +1,35 @@
-let firstEltHandler;
-let lastEltHandler;
+let firstElementHandler;
+let lastElementHandler;
 
-export const focusTrap = (elt) => {
-  const focusableElts = elt.querySelectorAll('button, textarea, input[type="text"], select, li');
+export const focusTrap = (element) => {
+  const focusableElements = element.querySelectorAll('button, textarea, input[type="text"], select, li');
 
-  const firstEltToFocus = focusableElts[0];
-  const lastEltToFocus = focusableElts[focusableElts.length - 1];
+  const firstElementToFocus = focusableElements[0];
+  const lastElementToFocus = focusableElements[focusableElements.length - 1];
 
-  firstEltHandler = (e) => {
+  firstElementHandler = (e) => {
     if (e.shiftKey && e.key === 'Tab') {
-      lastEltToFocus.focus();
+      lastElementToFocus.focus();
       e.preventDefault();
     }
   };
 
-  lastEltHandler = (e) => {
+  lastElementHandler = (e) => {
     if (!e.shiftKey && e.key === 'Tab') {
-      firstEltToFocus.focus();
+      firstElementToFocus.focus();
       e.preventDefault();
     }
   };
 
-  firstEltToFocus.addEventListener('keydown', firstEltHandler);
-  lastEltToFocus.addEventListener('keydown', lastEltHandler);
+  firstElementToFocus.addEventListener('keydown', firstElementHandler);
+  lastElementToFocus.addEventListener('keydown', lastElementHandler);
 };
 
-export const cancelFocusTrap = (elt) => {
-  const focusableElts = elt.querySelectorAll('button, textarea, input[type="text"], select, li');
-  const firstEltToFocus = focusableElts[0];
-  const lastEltToFocus = focusableElts[focusableElts.length - 1];
+export const cancelFocusTrap = (element) => {
+  const focusableElements = element.querySelectorAll('button, textarea, input[type="text"], select, li');
+  const firstElementToFocus = focusableElements[0];
+  const lastElementToFocus = focusableElements[focusableElements.length - 1];
 
-  firstEltToFocus.removeEventListener('keydown', firstEltHandler);
-  lastEltToFocus.removeEventListener('keydown', lastEltHandler);
+  firstElementToFocus.removeEventListener('keydown', firstElementHandler);
+  lastElementToFocus.removeEventListener('keydown', lastElementHandler);
 };

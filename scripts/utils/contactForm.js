@@ -1,6 +1,6 @@
 import { cancelFocusTrap, focusTrap } from '../helpers/focusTrap.js';
 
-const contactFormModal = () => {
+const displayContactModal = () => {
   const displayModalButton = document.querySelector('#contact-button');
   const closeModalButton = document.querySelector('#contact-close-button');
   const contactForm = document.querySelector('#contact-form');
@@ -59,4 +59,4 @@ const contactFormModal = () => {
   contactForm.addEventListener('submit', (e) => submitForm(e));
 };
 
-export default contactFormModal;
+export default displayContactModal;

@@ -10,6 +10,7 @@
     },
     "rules": {
         "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-        "import/extensions": ["error", "always"]
+        "import/extensions": ["error", "always"],
+        "no-nested-ternary": "off"
     }
 }
