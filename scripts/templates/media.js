@@ -56,7 +56,7 @@ export const mediaTemplate = (media, isDisplayedInModal) => {
 
 const createImageElement = (media, photographerName) => {
   const img = document.createElement('img');
-  img.src = `../../assets/photographers/${formatNameToFileName(
+  img.src = `https://jeanne4l.github.io/oc-fisheye/assets/photographers/${formatNameToFileName(
     photographerName,
   )}/${media.image}`;
   img.alt = media.title;
@@ -68,7 +68,7 @@ const createImageElement = (media, photographerName) => {
 
 const createVideoElement = (media, photographerName) => {
   const video = document.createElement('video');
-  video.src = `../../assets/photographers/${formatNameToFileName(
+  video.src = `https://jeanne4l.github.io/oc-fisheye/assets/photographers/${formatNameToFileName(
     photographerName,
   )}/${media.video}`;
   video.type = 'video/mp4';
