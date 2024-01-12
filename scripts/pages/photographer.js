@@ -24,7 +24,7 @@ const id = Number(params.get('id'));
 
 const getPhotographer = async () => {
   try {
-    const response = await fetch('../../data/photographers.json');
+    const response = await fetch('https://jeanne4l.github.io/oc-fisheye/data/photographers.json');
     if (!response.ok) {
       throw new Error(`Network response was not ok: ${response.statusText}`);
     }
