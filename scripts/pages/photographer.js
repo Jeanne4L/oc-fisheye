@@ -207,7 +207,6 @@ const displayFilters = (filtersList) => {
 
     li.classList.add('filters-list-option');
     li.id = `sort-${filter}`;
-    li.setAttribute('tabindex', '0');
     li.role = 'option';
 
     const filterValue = filterLocale[filter];
