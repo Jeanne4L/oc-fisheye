@@ -15,7 +15,7 @@
 	box-sizing: border-box;
 }
 
-body {
+body, textarea {
 	font-family: 'DM Sans', sans-serif;
 	margin: 0;
 }

@@ -40,11 +40,11 @@ const displayContactModal = () => {
   const submitForm = (e) => {
     e.preventDefault();
 
-    for (let i = 0; i < inputs.length; i++) {
-      if (inputs[i].nodeName === 'INPUT' || inputs[i].nodeName === 'TEXTAREA') {
-        console.log(inputs[i].value);
+    [...inputs].forEach((input) => {
+      if (['INPUT', 'TEXTAREA'].includes(input.nodeName)) {
+        console.log(input.value);
       }
-    }
+    });
 
     closeModal();
   };

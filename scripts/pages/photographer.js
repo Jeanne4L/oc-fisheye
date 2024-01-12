@@ -4,14 +4,14 @@ import { focusTrap, cancelFocusTrap } from '../helpers/focusTrap.js';
 import heartIconComponent from '../components/heartIcon.js';
 
 const filtersButton = document.querySelector('#sort-button');
-const filtersContainer = document.querySelector('#sort-filters-container');
-const filtersListElement = document.querySelector('#sort-filters');
-const filters = document.querySelectorAll('.sort-filters-option');
+const filtersContainer = document.querySelector('#filters-list-container');
+const filtersListElement = document.querySelector('#filters-list');
 const mediaContainer = document.querySelector('#medias');
 const mediaModal = document.getElementById('media-modal-overlay');
 const closeButton = document.querySelector('#media-close-button');
 const prevButton = document.querySelector('#media-prev-button');
 const nextButton = document.querySelector('#media-next-button');
+let filters = null;
 let filtersArray = ['popularity', 'date', 'title'];
 let clickedMedia = null;
 let currentMedia = null;
@@ -194,24 +194,29 @@ const displayInfoBox = (price) => {
 };
 
 const displayFilters = (filtersList) => {
+  const filterLocale = {
+    popularity: 'Popularité',
+    date: 'Date',
+    title: 'Titre',
+  };
+
   filtersListElement.innerHTML = '';
 
   filtersList.forEach((filter) => {
     const li = document.createElement('li');
 
-    li.classList.add('sort-filters-option');
+    li.classList.add('filters-list-option');
     li.id = `sort-${filter}`;
     li.setAttribute('tabindex', '0');
     li.role = 'option';
 
-    const filterValue = filter === 'popularity' ? 'Popularité'
-      : filter === 'date' ? 'Date'
-        : filter === 'title' ? 'Titre'
-          : '';
+    const filterValue = filterLocale[filter];
     li.textContent = filterValue;
 
     filtersListElement.appendChild(li);
   });
+
+  filters = document.querySelectorAll('.filters-list-option');
 };
 
 const toggleFiltersList = () => {
@@ -226,27 +231,24 @@ const toggleFiltersList = () => {
     filtersContainer.classList.remove('displayed-list');
     filtersListElement.setAttribute('aria-hidden', 'true');
 
-    console.log(filters)
-
     filters.forEach((filter) => {
-        console.log(filter)
       filter.classList.toggle('no-clickable');
       filter.setAttribute('tabindex', '-1');
     });
 
-    cancelFocusTrap(document.querySelector('.sort-filters'));
+    cancelFocusTrap(document.querySelector('.filters-list'));
   } else {
-    filtersListElement.style.transform = 'translateY(0)';
-
-    setTimeout(() => {
-      filtersContainer.classList.add('displayed-list');
-    }, 100);
+    filtersContainer.classList.add('displayed-list');
 
     filtersListElement.setAttribute('aria-hidden', 'false');
 
-    focusTrap(document.querySelector('.sort-filters-container'));
-  }
+    filters.forEach((filter) => {
+      filter.classList.toggle('no-clickable');
+      filter.setAttribute('tabindex', '0');
+    });
 
+    focusTrap(document.querySelector('.filters-list-container'));
+  }
 };
 
 const sortMedias = (media, filter) => {
@@ -337,7 +339,7 @@ const displayPageData = async (photographer, media) => {
   document.title = `Fisheye - ${name}`;
 
   // display photographer's banner
-  const banner = document.querySelector('.photograph-header');
+  const banner = document.querySelector('.photograph-banner');
 
   const photographerImgUrl = `assets/photographers/${portrait}`;
   const photographerImg = document.createElement('img');
