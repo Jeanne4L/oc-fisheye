@@ -1,9 +1,16 @@
-# Base de code du projet P6 - Parcours Front-end
+# Fisheye
+## Preview
 
-## Démarrer le projet
+This school project is the first version of the Fisheye's website. This is a freelance photographers website.
 
-Rien à installer ici, il suffit d'ouvrir le fichier `index.html`.
+## Features
 
-# oc-fisheye
-# oc-fisheye
-# oc-fisheye
+- Discover and contact freelance photographer
+
+## Website
+
+To see it, visit the link : https://jeanne4l.github.io/oc-fisheye/index.html
+
+## Tech
+
+- HTML, CSS, JavaScript

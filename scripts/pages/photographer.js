@@ -372,7 +372,7 @@ const displayPageData = async (photographer, media) => {
     }
   });
 
-  displayMediaGallery(media);
+  displayMediaGallery(media.sort((a, b) => b.likes - a.likes));
   applySortMediaEvents(media);
 
   // display info box with likes and price
