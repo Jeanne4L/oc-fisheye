@@ -10,6 +10,7 @@
     },
     "rules": {
         "import/extensions": ["error", "always"],
-        "no-param-reassign": "off"
+        "no-param-reassign": "off",
+        "linebreak-style": 0
     }
 }
