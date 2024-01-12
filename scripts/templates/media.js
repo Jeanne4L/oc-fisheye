@@ -30,7 +30,9 @@ export const mediaTemplate = (media, isDisplayedInModal) => {
       domElement.setAttribute('tabindex', '0');
       domElement.setAttribute('role', 'button');
     } else {
-      calculateMediaSizeWithRatio(domElement, 80);
+      if (window.screen.width > 600) {
+        calculateMediaSizeWithRatio(domElement, 80);
+      }
 
       if (domElement.tagName === 'VIDEO') {
         domElement.autoplay = true;
