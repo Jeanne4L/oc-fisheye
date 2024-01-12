@@ -201,7 +201,7 @@ const displayFilters = (filtersList) => {
 
     li.classList.add('sort-filters-option');
     li.id = `sort-${filter}`;
-    li.tabindex = '0';
+    li.setAttribute('tabindex', '0');
     li.role = 'option';
 
     const filterValue = filter === 'popularity' ? 'Popularité'
@@ -225,6 +225,16 @@ const toggleFiltersList = () => {
   if (filtersContainer.classList.contains('displayed-list')) {
     filtersContainer.classList.remove('displayed-list');
     filtersListElement.setAttribute('aria-hidden', 'true');
+
+    console.log(filters)
+
+    filters.forEach((filter) => {
+        console.log(filter)
+      filter.classList.toggle('no-clickable');
+      filter.setAttribute('tabindex', '-1');
+    });
+
+    cancelFocusTrap(document.querySelector('.sort-filters'));
   } else {
     filtersListElement.style.transform = 'translateY(0)';
 
@@ -233,10 +243,10 @@ const toggleFiltersList = () => {
     }, 100);
 
     filtersListElement.setAttribute('aria-hidden', 'false');
-  }
-  filters.forEach((filter) => filter.classList.toggle('no-clickable'));
 
-  focusTrap(document.querySelector('.sort-filters-container'));
+    focusTrap(document.querySelector('.sort-filters-container'));
+  }
+
 };
 
 const sortMedias = (media, filter) => {
@@ -264,7 +274,6 @@ const sortMedias = (media, filter) => {
     mediaContainer.innerHTML = '';
     displayMediaGallery(media.sort(sortFunction));
     displayFilters(filtersArray);
-    cancelFocusTrap(document.querySelector('.sort-filters'));
     toggleFiltersList();
   }
 };

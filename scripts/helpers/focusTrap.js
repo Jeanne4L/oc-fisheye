@@ -3,7 +3,6 @@ let lastElementHandler;
 
 export const focusTrap = (element) => {
   const focusableElements = element.querySelectorAll('button, textarea, input[type="text"], select, li');
-
   const firstElementToFocus = focusableElements[0];
   const lastElementToFocus = focusableElements[focusableElements.length - 1];
 
@@ -21,8 +20,8 @@ export const focusTrap = (element) => {
     }
   };
 
-  firstElementToFocus.addEventListener('keydown', firstElementHandler);
-  lastElementToFocus.addEventListener('keydown', lastElementHandler);
+  firstElementToFocus.addEventListener('keydown', (e) => firstElementHandler(e));
+  lastElementToFocus.addEventListener('keydown', (e) => lastElementHandler(e));
 };
 
 export const cancelFocusTrap = (element) => {
