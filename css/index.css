@@ -64,7 +64,12 @@ main {
 	header {
 		flex-direction: column;
 		padding: 20px 5% 0 5%;
+        height: auto;
 	}
+
+    main {
+        margin-top: 50px;
+    }
 
 	.logo {
 		margin: 0;
