@@ -1,6 +1,8 @@
 import { cancelFocusTrap, focusTrap } from '../helpers/focusTrap.js';
 
 const displayContactModal = () => {
+  const modalOverlay = document.getElementById('contact-modal-overlay');
+  const modal = document.querySelector('.contact-modal');
   const displayModalButton = document.querySelector('#contact-button');
   const closeModalButton = document.querySelector('#contact-close-button');
   const contactForm = document.querySelector('#contact-form');
@@ -8,29 +10,25 @@ const displayContactModal = () => {
   const sendButton = document.querySelector('#contact-form-send-button');
 
   const displayModal = () => {
-    const modal = document.getElementById('contact-modal-overlay');
-    modal.setAttribute('aria-hidden', 'false');
-    modal.style.display = 'flex';
+    modalOverlay.setAttribute('aria-hidden', 'false');
+    modal.setAttribute('aria-modal', 'true');
+    modalOverlay.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 
     inputs[0].focus();
 
-    focusTrap(document.querySelector('.contact-modal'));
+    focusTrap(modal);
   };
 
   const closeModal = () => {
-    const modal = document.getElementById('contact-modal-overlay');
-    modal.style.display = 'none';
+    modalOverlay.style.display = 'none';
     document.body.style.overflow = 'visible';
-    modal.setAttribute('aria-hidden', 'true');
+    modalOverlay.setAttribute('aria-hidden', 'true');
+    modal.setAttribute('aria-modal', 'false');
 
     contactForm.reset();
 
-    cancelFocusTrap(
-      document.querySelector('.contact-modal'),
-      closeModalButton,
-      sendButton,
-    );
+    cancelFocusTrap(modal);
 
     setTimeout(() => {
       displayModalButton.focus();

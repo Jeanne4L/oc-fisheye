@@ -8,7 +8,8 @@ const filtersButton = document.querySelector('#sort-button');
 const filtersContainer = document.querySelector('#filters-list-container');
 const filtersListElement = document.querySelector('#filters-list');
 const mediaContainer = document.querySelector('#medias');
-const lightBox = document.getElementById('lightbox-overlay');
+const lightBoxOverlay = document.getElementById('lightbox-overlay');
+const lightBox = document.querySelector('.lightbox');
 const closeButton = document.querySelector('#media-close-button');
 const prevButton = document.querySelector('#media-prev-button');
 const nextButton = document.querySelector('#media-next-button');
@@ -79,9 +80,10 @@ const openLightBox = (e, media) => {
 
     e.preventDefault();
 
-    lightBox.style.display = 'flex';
+    lightBoxOverlay.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    lightBox.setAttribute('aria-hidden', 'false');
+    lightBoxOverlay.setAttribute('aria-hidden', 'false');
+    lightBox.setAttribute('aria-modal', 'true');
 
     const displayedMedia = media.find((med) => med.id === Number(e.target.id));
     index = media.indexOf(displayedMedia);
@@ -90,7 +92,7 @@ const openLightBox = (e, media) => {
 
     closeButton.focus();
 
-    focusTrap(document.querySelector('.lightbox'));
+    focusTrap(lightBox);
   }
 };
 
@@ -105,11 +107,12 @@ const navigateMediaInModal = (currentIndex, media, direction) => {
 };
 
 const closeLightBox = () => {
-  lightBox.style.display = 'none';
+  lightBoxOverlay.style.display = 'none';
   document.body.style.overflow = 'visible';
-  lightBox.setAttribute('aria-hidden', 'true');
+  lightBoxOverlay.setAttribute('aria-hidden', 'true');
+  lightBox.setAttribute('aria-modal', 'false');
 
-  cancelFocusTrap(document.querySelector('.lightbox'));
+  cancelFocusTrap(lightBox);
 
   if (clickedMedia) {
     clickedMedia.focus();
@@ -311,7 +314,7 @@ const applyNavigateMediaInLightBoxEvents = (media) => {
       navigateMediaInModal(index, media, -1);
     }
   });
-  lightBox.addEventListener('keydown', (e) => {
+  lightBoxOverlay.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') {
       navigateMediaInModal(index, media, -1);
     }
@@ -322,7 +325,7 @@ const applyNavigateMediaInLightBoxEvents = (media) => {
       navigateMediaInModal(index, media, 1);
     }
   });
-  lightBox.addEventListener('keydown', (e) => {
+  lightBoxOverlay.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') {
       navigateMediaInModal(index, media, 1);
     }
