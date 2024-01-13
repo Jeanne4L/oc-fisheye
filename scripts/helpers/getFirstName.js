@@ -1,7 +1,7 @@
-const formatNameToFileName = (name) => {
+const getFirstName = (name) => {
   const nameToArray = name.split(' ');
   const firstName = nameToArray[0];
   return firstName.replace('-', ' ');
 };
 
-export default formatNameToFileName;
+export default getFirstName;

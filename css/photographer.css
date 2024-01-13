@@ -55,7 +55,7 @@ h2 {
 
 /*          MODAL            */
 #contact-modal-overlay,
-#media-modal-overlay {
+#lightbox-overlay {
 	display: none;
 	position: fixed;
 	top: 0;
@@ -153,14 +153,14 @@ h2 {
 }
 
 /*MEDIA MODAL*/
-.media-modal {
+.lightbox {
 	background: #fff;
 	max-height: 95%;
 	max-width: 95%;
 	flex-direction: row;
 }
 
-.media-modal article {
+.lightbox article {
 	width: 100%;
 	height: 100%;
 	margin: 0 20px;
@@ -171,7 +171,7 @@ h2 {
 	margin: 0;
 }
 
-.media-modal .media {
+.lightbox .media {
 	max-height: 100%;
 	max-width: 100%;
     margin: auto;
@@ -183,7 +183,7 @@ h2 {
 	cursor: pointer;
 }
 
-.media-modal .close-button {
+.lightbox .close-button {
 	position: absolute;
 	top: 35px;
 	right: 35px;
@@ -443,7 +443,7 @@ h2 {
 		right: 5%;
 	}
 
-	.media-modal .close-button {
+	.lightbox .close-button {
 		top: 0;
 		right: 0;
 		margin: 10px;
@@ -459,18 +459,18 @@ h2 {
 		margin-top: 30px;
 	}
 
-	.media-modal {
+	.lightbox {
 		padding: 0;
 	}
 
-	.media-modal article {
+	.lightbox article {
 		margin: 32px 0 0 0;
         display: flex;
         flex-direction: column;
         justify-content: center;
 	}
 
-	.media-modal .media {
+	.lightbox .media {
 		width: 100%;
         height: auto;
         max-height: 100%;

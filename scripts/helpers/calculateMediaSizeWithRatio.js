@@ -13,10 +13,10 @@ const calculateMediaSizeWithRatio = (
 
   if (width > height) {
     width = maxSize;
-    height = maxSize / mediaRatio;
+    height = width / mediaRatio;
   } else {
     height = maxSize;
-    width = maxSize * mediaRatio;
+    width = height * mediaRatio;
   }
 
   elementToResize.style.width = `${width}px`;

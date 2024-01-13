@@ -1,7 +1,7 @@
-const photographerTemplate = (data) => {
+const photographerTemplate = (photographer) => {
   const {
     name, id, city, country, tagline, price, portrait,
-  } = data;
+  } = photographer;
 
   const picture = `assets/photographers/${portrait}`;
 
@@ -41,7 +41,7 @@ const photographerTemplate = (data) => {
 
     return article;
   };
-  return { data, getUserCardDOM };
+  return { photographer, getUserCardDOM };
 };
 
 export default photographerTemplate;

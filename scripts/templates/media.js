@@ -1,4 +1,4 @@
-import formatNameToFileName from '../helpers/formatNameToFileName.js';
+import getFirstName from '../helpers/getFirstName.js';
 import calculateMediaSizeWithRatio from '../helpers/calculateMediaSizeWithRatio.js';
 import heartIconComponent from '../components/heartIcon.js';
 
@@ -58,7 +58,7 @@ export const mediaTemplate = (media, isDisplayedInModal) => {
 
 const createImageElement = (media, photographerName) => {
   const img = document.createElement('img');
-  img.src = `https://jeanne4l.github.io/oc-fisheye/assets/photographers/${formatNameToFileName(
+  img.src = `https://jeanne4l.github.io/oc-fisheye/assets/photographers/${getFirstName(
     photographerName,
   )}/${media.image}`;
   img.alt = media.title;
@@ -70,7 +70,7 @@ const createImageElement = (media, photographerName) => {
 
 const createVideoElement = (media, photographerName) => {
   const video = document.createElement('video');
-  video.src = `https://jeanne4l.github.io/oc-fisheye/assets/photographers/${formatNameToFileName(
+  video.src = `https://jeanne4l.github.io/oc-fisheye/assets/photographers/${getFirstName(
     photographerName,
   )}/${media.video}`;
   video.type = 'video/mp4';

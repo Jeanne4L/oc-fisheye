@@ -3,11 +3,12 @@ import displayContactModal from '../utils/contactForm.js';
 import { focusTrap, cancelFocusTrap } from '../helpers/focusTrap.js';
 import heartIconComponent from '../components/heartIcon.js';
 
+const main = document.querySelector('main');
 const filtersButton = document.querySelector('#sort-button');
 const filtersContainer = document.querySelector('#filters-list-container');
 const filtersListElement = document.querySelector('#filters-list');
 const mediaContainer = document.querySelector('#medias');
-const mediaModal = document.getElementById('media-modal-overlay');
+const lightBox = document.getElementById('lightbox-overlay');
 const closeButton = document.querySelector('#media-close-button');
 const prevButton = document.querySelector('#media-prev-button');
 const nextButton = document.querySelector('#media-next-button');
@@ -53,7 +54,7 @@ const incrementLikesCount = (e, mediaItem, mediaElement) => {
   e.target.closest('svg').style.pointerEvents = 'none';
 };
 
-const displaySelectedMediaInModal = (
+const displaySelectedMediaInLightBox = (
   mediaToDisplay,
   isDisplayedInModal,
   insertBeforeElement,
@@ -72,24 +73,24 @@ const displaySelectedMediaInModal = (
   );
 };
 
-const openMediaModal = (e, media) => {
+const openLightBox = (e, media) => {
   if (e.target.classList.contains('media')) {
     clickedMedia = e.target;
 
     e.preventDefault();
 
-    mediaModal.style.display = 'flex';
+    lightBox.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    mediaModal.setAttribute('aria-hidden', 'false');
+    lightBox.setAttribute('aria-hidden', 'false');
 
     const displayedMedia = media.find((med) => med.id === Number(e.target.id));
     index = media.indexOf(displayedMedia);
 
-    displaySelectedMediaInModal(displayedMedia, true, prevButton);
+    displaySelectedMediaInLightBox(displayedMedia, true, prevButton);
 
     closeButton.focus();
 
-    focusTrap(document.querySelector('.media-modal'));
+    focusTrap(document.querySelector('.lightbox'));
   }
 };
 
@@ -100,20 +101,18 @@ const navigateMediaInModal = (currentIndex, media, direction) => {
 
   index = currentIndex;
 
-  displaySelectedMediaInModal(mediaToDisplay, true, prevButton);
+  displaySelectedMediaInLightBox(mediaToDisplay, true, prevButton);
 };
 
-const closeMediaModal = () => {
-  mediaModal.style.display = 'none';
+const closeLightBox = () => {
+  lightBox.style.display = 'none';
   document.body.style.overflow = 'visible';
-  mediaModal.setAttribute('aria-hidden', 'true');
+  lightBox.setAttribute('aria-hidden', 'true');
 
-  cancelFocusTrap(document.querySelector('.media-modal'));
+  cancelFocusTrap(document.querySelector('.lightbox'));
 
   if (clickedMedia) {
-    setTimeout(() => {
-      clickedMedia.focus();
-    }, 0);
+    clickedMedia.focus();
   }
 };
 
@@ -131,11 +130,11 @@ const displayMediaGallery = (media) => {
       ) {
         incrementLikesCount(e, mediaItem, mediaElement);
       }
-      openMediaModal(e, media);
+      openLightBox(e, media);
     });
     mediaElement.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        openMediaModal(e, media);
+        openLightBox(e, media);
       }
       if (e.target.classList.contains('likes-button') && e.key === 'Enter') {
         incrementLikesCount(e, mediaItem, mediaElement);
@@ -305,14 +304,14 @@ const applySortMediaEvents = (media) => {
   });
 };
 
-const applyNavigateMediaInModalEvents = (media) => {
+const applyNavigateMediaInLightBoxEvents = (media) => {
   prevButton.addEventListener('click', () => navigateMediaInModal(index, media, -1));
   prevButton.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       navigateMediaInModal(index, media, -1);
     }
   });
-  mediaModal.addEventListener('keydown', (e) => {
+  lightBox.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') {
       navigateMediaInModal(index, media, -1);
     }
@@ -323,7 +322,7 @@ const applyNavigateMediaInModalEvents = (media) => {
       navigateMediaInModal(index, media, 1);
     }
   });
-  mediaModal.addEventListener('keydown', (e) => {
+  lightBox.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') {
       navigateMediaInModal(index, media, 1);
     }
@@ -375,15 +374,14 @@ const displayPageData = async (photographer, media) => {
   applySortMediaEvents(media);
 
   // display info box with likes and price
-  const main = document.querySelector('main');
   main.appendChild(displayInfoBox(price));
 
-  applyNavigateMediaInModalEvents(media);
+  applyNavigateMediaInLightBoxEvents(media);
 
-  closeButton.addEventListener('click', closeMediaModal);
+  closeButton.addEventListener('click', closeLightBox);
   closeButton.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-      closeMediaModal();
+      closeLightBox();
     }
   });
 };
