@@ -311,6 +311,7 @@ const applyNavigateMediaInLightBoxEvents = (media) => {
   prevButton.addEventListener('click', () => navigateMediaInLightBox(index, media, -1));
   prevButton.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       navigateMediaInLightBox(index, media, -1);
     }
   });
@@ -318,6 +319,7 @@ const applyNavigateMediaInLightBoxEvents = (media) => {
   nextButton.addEventListener('click', () => navigateMediaInLightBox(index, media, 1));
   nextButton.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       navigateMediaInLightBox(index, media, 1);
     }
   });
