@@ -96,7 +96,7 @@ const openLightBox = (e, media) => {
   }
 };
 
-const navigateMediaInModal = (currentIndex, media, direction) => {
+const navigateMediaInLightBox = (currentIndex, media, direction) => {
   currentIndex = (currentIndex + direction + media.length) % media.length;
 
   const mediaToDisplay = media[currentIndex];
@@ -308,26 +308,25 @@ const applySortMediaEvents = (media) => {
 };
 
 const applyNavigateMediaInLightBoxEvents = (media) => {
-  prevButton.addEventListener('click', () => navigateMediaInModal(index, media, -1));
+  prevButton.addEventListener('click', () => navigateMediaInLightBox(index, media, -1));
   prevButton.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-      navigateMediaInModal(index, media, -1);
+      navigateMediaInLightBox(index, media, -1);
     }
   });
-  lightBoxOverlay.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') {
-      navigateMediaInModal(index, media, -1);
-    }
-  });
-  nextButton.addEventListener('click', () => navigateMediaInModal(index, media, 1));
+
+  nextButton.addEventListener('click', () => navigateMediaInLightBox(index, media, 1));
   nextButton.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-      navigateMediaInModal(index, media, 1);
+      navigateMediaInLightBox(index, media, 1);
     }
   });
+
   lightBoxOverlay.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') {
-      navigateMediaInModal(index, media, 1);
+    if (e.key === 'ArrowLeft') {
+      navigateMediaInLightBox(index, media, -1);
+    } else if (e.key === 'ArrowRight') {
+      navigateMediaInLightBox(index, media, 1);
     }
   });
 };
