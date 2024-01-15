@@ -380,6 +380,7 @@ const displayPageData = async (photographer, media) => {
   // display info box with likes and price
   main.appendChild(displayInfoBox(price));
 
+  // toggle lightbox
   applyNavigateMediaInLightBoxEvents(media);
 
   closeButton.addEventListener('click', closeLightBox);

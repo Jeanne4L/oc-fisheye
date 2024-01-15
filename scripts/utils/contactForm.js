@@ -7,7 +7,6 @@ const displayContactModal = () => {
   const closeModalButton = document.querySelector('#contact-close-button');
   const contactForm = document.querySelector('#contact-form');
   const inputs = contactForm.elements;
-  const sendButton = document.querySelector('#contact-form-send-button');
 
   const displayModal = () => {
     modalOverlay.setAttribute('aria-hidden', 'false');
