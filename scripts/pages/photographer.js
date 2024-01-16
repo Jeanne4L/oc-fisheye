@@ -126,6 +126,7 @@ const displayMediaGallery = (media) => {
     const mediaModel = mediaTemplate(mediaItem, false);
     const mediaElement = mediaModel.getmediaElement();
     mediaContainer.appendChild(mediaElement);
+    mediaContainer.setAttribute('aria-live', 'polite');
 
     mediaElement.addEventListener('click', (e) => {
       if (
