@@ -53,6 +53,16 @@ const displayContactModal = () => {
       closeModal();
     }
   });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) {
+      closeModal();
+    }
+  });
   contactForm.addEventListener('submit', (e) => submitForm(e));
 };
 

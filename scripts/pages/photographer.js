@@ -74,6 +74,19 @@ const displaySelectedMediaInLightBox = (
   );
 };
 
+const closeLightBox = () => {
+  lightBoxOverlay.style.display = 'none';
+  document.body.style.overflow = 'visible';
+  lightBoxOverlay.setAttribute('aria-hidden', 'true');
+  lightBox.setAttribute('aria-modal', 'false');
+
+  cancelFocusTrap(lightBox);
+
+  if (clickedMedia) {
+    clickedMedia.focus();
+  }
+};
+
 const openLightBox = (e, media) => {
   if (e.target.classList.contains('media')) {
     clickedMedia = e.target;
@@ -93,6 +106,18 @@ const openLightBox = (e, media) => {
     closeButton.focus();
 
     focusTrap(lightBox);
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeLightBox();
+      }
+    });
+
+    lightBoxOverlay.addEventListener('click', (event) => {
+      if (event.target === lightBoxOverlay) {
+        closeLightBox();
+      }
+    });
   }
 };
 
@@ -104,19 +129,6 @@ const navigateMediaInLightBox = (currentIndex, media, direction) => {
   index = currentIndex;
 
   displaySelectedMediaInLightBox(mediaToDisplay, true, prevButton);
-};
-
-const closeLightBox = () => {
-  lightBoxOverlay.style.display = 'none';
-  document.body.style.overflow = 'visible';
-  lightBoxOverlay.setAttribute('aria-hidden', 'true');
-  lightBox.setAttribute('aria-modal', 'false');
-
-  cancelFocusTrap(lightBox);
-
-  if (clickedMedia) {
-    clickedMedia.focus();
-  }
 };
 
 const displayMediaGallery = (media) => {
@@ -351,7 +363,7 @@ const displayPageData = async (photographer, media) => {
   banner.prepend(displayPhotographerDescription(name, tagline, city, country));
   banner.appendChild(photographerImg);
 
-  //   display contact modal
+  // display contact modal
   displayContactModal();
   const modalTitle = document.querySelector('#modal-title');
   modalTitle.innerHTML += `<br>${name}`;
