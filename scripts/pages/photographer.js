@@ -413,7 +413,13 @@ const init = async () => {
   const photographerMedia = media.filter((mediaItem) => mediaItem.photographerId === id);
 
   const mediaWithPhotographerName = photographerMedia.map(
-    (mediaItem) => createMedia(mediaItem, photographerData.name),
+    (mediaItem) => {
+      try {
+        return createMedia(mediaItem, photographerData.name);
+      } catch (error) {
+        return error;
+      }
+    },
   );
 
   displayPageData(photographerData, mediaWithPhotographerName);

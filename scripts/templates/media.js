@@ -85,9 +85,6 @@ const createVideoElement = (media, photographerName) => {
 export const createMedia = (media, photographerName) => {
   let getDomElement;
 
-  if (!media.image && !media.video) {
-    throw new Error('Unknown media type');
-  }
   if (media.image) {
     getDomElement = () => createImageElement(media, photographerName);
   }
